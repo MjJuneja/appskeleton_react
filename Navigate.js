@@ -1,18 +1,58 @@
 import {createStackNavigator} from 'react-navigation';
 import React from 'react';
-import { StyleSheet, Text, View,Image,Button } from 'react-native';
+import { StyleSheet, Text, View,Image,Button, ToastAndroid } from 'react-native';
 import HomeScreen from './Home';
-import Expo from 'expo';
-
-
+import Voice from 'react-native-voice';
+// import SpeechAndroid from 'react-native-android-voice';
 
 class ProfileScreen extends React.Component {
   static navigationOptions = {
     title: 'Welcome',
   };
+  constructor() {
+    super();
+    this.state = {
+        results : []
+    }
+    Voice.onSpeechResults = this.onSpeechResults.bind(this);
+  }
+
+  onSpeechResults(e){
+    this.setState({
+        results:e.value[0]
+    })
+    // ToastAndroid.show(e.value , ToastAndroid.LONG);
+  }
+
+//     // Voice.onSpeechStart = this.onSpeechStartHandler.bind(this);
+//     // Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this);
+//     // Voice.onSpeechResults = this.onSpeechResultsHandler.bind(this);
+//   }
+    onSpeechStart(){
+        // alert("inside");
+         Voice.start('en-US');
+        //  ToastAndroid.show(spokenText , ToastAndroid.LONG);
+    }
+
+    onSpeechEnd(){
+        Voice.stop();
+    }
+    
   render() {
     const { navigate } = this.props.navigation;
-    return(<Text></Text>);
+    return(<View><Button title="Start speech"
+               onPress={this.onSpeechStart.bind()}
+                 />
+                 <Button title="Stop speech"
+               onPress={this.onSpeechEnd.bind()}
+                 />
+                 {/*{
+                     this.state.results.map((text,index)=>{
+                         return(<Text key={index}>{text}</Text>)
+                     })
+                 }*/}
+                 <Text>{this.state.results}</Text>
+                 </View>)
   }
 }
 

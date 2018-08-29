@@ -1,5 +1,12 @@
 {
   "expo": {
-    "sdkVersion": "27.0.0"
-  }
+    "sdkVersion": "27.0.0",
+    "name": "Appskeleton",
+    "description": "appsceleton",
+    "android": {
+      "package": "com.infinityshark.appskeleton"
+    }
+  },
+  "name": "appskeleton",
+  "displayName": "Appskeleton"
 }
