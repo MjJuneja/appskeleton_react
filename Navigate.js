@@ -1,58 +1,30 @@
 import {createStackNavigator} from 'react-navigation';
 import React from 'react';
-import { StyleSheet, Text, View,Image,Button, ToastAndroid } from 'react-native';
-import HomeScreen from './Home';
-import Voice from 'react-native-voice';
-// import SpeechAndroid from 'react-native-android-voice';
+import { StyleSheet, Text, View,Image,Button} from 'react-native';
+import Home from './components/home';
+
+import LinkToRegister from './components/intializing';
+import RegisterOptions from './components/intializing/registerOptions';
+import EmailRegister from './components/intializing/emailRegistration';
+import Login from './components/login';
+import ForgotPassword from './components/forgotPassword';
+import Profile from './components/profile';
+import Settings from './components/settings';
+import ChangePassword from './components/profile/changePassword';
+import ChangeUsername from './components/profile/changeUsername';
+// import VideosList from './components/videos';
+import KTenTest from './components/kTenTest';
+import Analysis from './components/analysis';
+import Audio from './components/audio';
+
 
 class ProfileScreen extends React.Component {
   static navigationOptions = {
-    title: 'Welcome',
+    title: 'Watch Your Talk',
   };
-  constructor() {
-    super();
-    this.state = {
-        results : []
-    }
-    Voice.onSpeechResults = this.onSpeechResults.bind(this);
-  }
-
-  onSpeechResults(e){
-    this.setState({
-        results:e.value[0]
-    })
-    // ToastAndroid.show(e.value , ToastAndroid.LONG);
-  }
-
-//     // Voice.onSpeechStart = this.onSpeechStartHandler.bind(this);
-//     // Voice.onSpeechEnd = this.onSpeechEndHandler.bind(this);
-//     // Voice.onSpeechResults = this.onSpeechResultsHandler.bind(this);
-//   }
-    onSpeechStart(){
-        // alert("inside");
-         Voice.start('en-US');
-        //  ToastAndroid.show(spokenText , ToastAndroid.LONG);
-    }
-
-    onSpeechEnd(){
-        Voice.stop();
-    }
-    
   render() {
     const { navigate } = this.props.navigation;
-    return(<View><Button title="Start speech"
-               onPress={this.onSpeechStart.bind()}
-                 />
-                 <Button title="Stop speech"
-               onPress={this.onSpeechEnd.bind()}
-                 />
-                 {/*{
-                     this.state.results.map((text,index)=>{
-                         return(<Text key={index}>{text}</Text>)
-                     })
-                 }*/}
-                 <Text>{this.state.results}</Text>
-                 </View>)
+    return(<Text></Text>);
   }
 }
 
@@ -60,7 +32,7 @@ let MyTransition = (index, position) => {
     const inputRange = [index - 1, index, index + 1];
     const opacity = position.interpolate({
         inputRange,
-        outputRange: [.8, 1, 1],
+        outputRange: [.8, 1, 1], 
     });
 
     const scaleY = position.interpolate({
@@ -91,16 +63,95 @@ let TransitionConfiguration = () => {
 
 
 const Navigate = createStackNavigator({
-  Home: { screen: HomeScreen },
-  Profile: { screen: ProfileScreen },
-    },{
-        // navigationOptions:{
-        //     headerStyle:{
-        //         marginTop:Expo.Constants.statusBarHeight
-        //     }
-        // }
+    Home: { screen: Home,
+        
+        },
+    RegisterOptions : {
+        screen: RegisterOptions,
+        navigationOptions: () => ({
+            title: `Register Using`,
+            headerBackTitle: null
+        }),
+    },
+    HomeScreen : {
+        screen: Home,
+        navigationOptions: () => ({
+            title: `Watch Your Talk`,
+            headerBackTitle: null
+        }),
+    },
+    EmailRegister : {
+        screen: EmailRegister,
+        navigationOptions: () => ({
+            title: `Email Registration`,
+            headerBackTitle: null
+        }),
+    },
+    ForgotPassword : {
+        screen: ForgotPassword,
+        navigationOptions: () => ({
+            title: `Forgot Password`,
+            headerBackTitle: null
+        }),
+    },
+    Profile: { screen: Profile,
+        navigationOptions: () => ({
+            title: `Profile Settings`,
+            headerBackTitle: null
+          }),
+     },
+     Login: { screen: Login,
+        navigationOptions: () => ({
+            title: `Login`,
+            headerBackTitle: null
+          }),
+     },
+     KTenTest: { screen: KTenTest,
+        navigationOptions: () => ({
+            title: `K10 Test`,
+            headerBackTitle: null
+          }),
+     },
+     Analysis: { screen: Analysis,
+        navigationOptions: () => ({
+            title: `Analysis`,
+            headerBackTitle: null
+          }),
+     },
+    //  VideosList: { screen: VideosList,
+    //     navigationOptions: () => ({
+    //         title: `Videos`,
+    //         headerBackTitle: null
+    //       }),
+    //  },
+     Settings: { screen: Settings,
+        navigationOptions: () => ({
+            title: `Settings`,
+            headerBackTitle: null
+          }),
+     },
+     ChangePassword: { screen: ChangePassword,
+        navigationOptions: () => ({
+            title: `Change Password`,
+            headerBackTitle: null
+          }),
+     },
+     ChangeUsername: { screen: ChangeUsername,
+        navigationOptions: () => ({
+            title: `Change Username`,
+            headerBackTitle: null
+          }),
+     },
+     
+    LinkToRegister: {screen : LinkToRegister},
+},
+{
+            headerMode: 'none',
+            navigationOptions: {
+              headerVisible: false,
+            },
         transitionConfig: TransitionConfiguration
-    }
+}
 );
-
+//chl gya?
 export default Navigate;
