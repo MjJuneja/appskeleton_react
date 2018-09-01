@@ -167,7 +167,8 @@ class Home extends Component {
             ],
             results : [],
             partialResult: [],
-            content: ""
+            content: "",
+            micFlag: false
         }
         Voice.onSpeechResults = this.onSpeechResults.bind(this);
         Voice.onSpeechPartialResults =  this.onSpeechPartialResults.bind(this);
@@ -251,6 +252,7 @@ class Home extends Component {
         console.log("in retrieve data");
         try {
           const userData = await AsyncStorage.getItem('userData');
+        //   const micFlag = await AsyncStorage.getItem('micFlag');
           if (userData !== null) {
             // We have data!!
             userData = JSON.parse(userData);
@@ -267,11 +269,9 @@ class Home extends Component {
 
     componentDidMount() {
         console.log("component mounted");
+        if(this.state.micFlag) {
           this.onSpeechStart();
-        // setInterval(()=>{
-        //     this.onSpeechStart();
-        //     console.log(2);
-        // }, 5000);
+        }
       }
 
     submitAnswer = ()=> {
