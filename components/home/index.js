@@ -165,16 +165,32 @@ class Home extends Component {
                 "If 1 is the most depressed you have ever felt and 10 is the most happiest you have every felt, what number would you put yourself now",
                 "If 1 is the most anxious you have ever felt and 10 is the most relaxed you have ever felt, what number would you put yourself now"
             ],
-            results : []
+            results : [],
+            partialResult: [],
+            content: ""
         }
         Voice.onSpeechResults = this.onSpeechResults.bind(this);
+        Voice.onSpeechPartialResults =  this.onSpeechPartialResults.bind(this);
     }
 
-     onSpeechResults(e){
-    this.setState({
-        results:e.value[0]
-    })
+    onSpeechResults(e) {
+        let content = this.state.content;
+        content+=" "+e.value[0];
+        this.setState ({
+            results:e.value[0],
+            content
+        });
+        console.log("content", content);
+        this.submitVoice(content);
+        // this.onSpeechStart();
     // ToastAndroid.show(e.value , ToastAndroid.LONG);
+    }
+
+    onSpeechPartialResults(e) {
+        this.setState({
+            partialResult : e.value[0]
+        });
+        console.log(e.value[0]);
     }
 
     onSpeechStart(){
@@ -183,10 +199,9 @@ class Home extends Component {
         //  ToastAndroid.show(spokenText , ToastAndroid.LONG);
     }
 
-    onSpeechEnd(){
+    onSpeechEnd(e) {
         Voice.stop();
     }
-       
 
 
     tabs = [
@@ -250,8 +265,13 @@ class Home extends Component {
          }
       }
 
-      async componentWillMount() {
-        
+    componentDidMount() {
+        console.log("component mounted");
+          this.onSpeechStart();
+        // setInterval(()=>{
+        //     this.onSpeechStart();
+        //     console.log(2);
+        // }, 5000);
       }
 
     submitAnswer = ()=> {
@@ -266,6 +286,46 @@ class Home extends Component {
             data: {
                 "type":"home",
                 "points":this.state.sliderValue
+            }
+          }).then(data => {
+              console.log(data.data);
+              this.refs.toast.show(data.data.message, 1000, () => {
+                // something you want to do at close
+            });
+          }).catch(err=>{
+                console.log(err);  
+          });
+    }
+
+    submitVoice = content => {
+        axios({
+            method: 'post',
+            url: 'http://13.238.16.112/sentiment/create',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'token '+this.state.userData.sessionId
+            },
+            data: {
+                "content": content
+            }
+          }).then(data => {
+              console.log(data.data);
+              this.refs.toast.show(data.data.message, 1000, () => {
+                // something you want to do at close
+            });
+          }).catch(err=>{
+                console.log(err);  
+          });
+
+          axios({
+            method: 'post',
+            url: 'http://13.238.16.112/words/create',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'token '+this.state.userData.sessionId
+            },
+            data: {
+                "content": content
             }
           }).then(data => {
               console.log(data.data);
@@ -357,12 +417,12 @@ class Home extends Component {
                     tabs={this.tabs}
                     onTabPress={activeTab => this._handleNavigation(activeTab.navigate)}
                 /> 
-                <Button title="Start speech"
+                {/* <Button title="Start speech"
                onPress={this.onSpeechStart.bind()}
                  />
                  <Button title="Stop speech"
                onPress={this.onSpeechEnd.bind()}
-                 />
+                 /> */}
                  <Text>{this.state.results}</Text>
                 <Toast ref="toast"  position='top'/>
                 <ScrollView>
@@ -390,7 +450,7 @@ class Home extends Component {
                         </View>
                         <Text style={kTenTestStyles.questionDescription}>Hey {this.state.userData.userInfo.firstName}, for us to be able to help you focus on abundance through positive speech, we would like to help you monitor your progress. If you can answer the three questions below, we can help you keep a track of your progress: on a scale of 1-10.</Text>
                         <View style={kTenTestStyles.q}>
-                            <Text style={kTenTestStyles.question}>{this.state.questions[this.state.currentQuestionCounter]}?</Text>
+                   <Text style={kTenTestStyles.question}>{"Q"+(this.state.currentQuestionCounter+1) + ") " + this.state.questions[this.state.currentQuestionCounter]}?</Text>
                             
                         </View>
                     </View>
@@ -468,8 +528,7 @@ class Home extends Component {
 const kTenTestStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f3f4f5",
-        paddingTop: 35
+        backgroundColor: "#f4f5f8"
     },
     personalisedMsgWrapper : {
         position: "relative",
@@ -603,8 +662,9 @@ const kTenTestStyles = StyleSheet.create({
         marginLeft: 20
     },
     prevNextButtonText : {
-        textAlign: "center",
-        color: "#fff"
+        alignSelf: "center",
+        color: "#fff",
+        fontFamily: "OpenSans-SemiBold"
     },
     questionWrapperTaken : {
         marginTop: 40

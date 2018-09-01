@@ -36,6 +36,8 @@
     "react-navigation": "^2.11.2"
   },
   "rnpm": {
-   "assets": ["./assets/fonts"]
-}
+    "assets": [
+      "./assets/fonts"
+    ]
+  }
 }

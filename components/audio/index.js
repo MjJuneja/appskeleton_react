@@ -21,7 +21,7 @@ export default class Audio extends React.Component {
       this.setState({
           results:e.value[0]
       })
-      ToastAndroid.show(e.value , ToastAndroid.LONG);
+    //   ToastAndroid.show(e.value , ToastAndroid.LONG);
     }
   
   //     // Voice.onSpeechStart = this.onSpeechStartHandler.bind(this);

@@ -16,6 +16,7 @@ import ChangeUsername from './components/profile/changeUsername';
 import KTenTest from './components/kTenTest';
 import Analysis from './components/analysis';
 import Audio from './components/audio';
+import MessageScreen from './components/intializing/messageScreen';
 
 
 class ProfileScreen extends React.Component {
@@ -87,6 +88,9 @@ const Navigate = createStackNavigator({
             headerBackTitle: null
         }),
     },
+    MessageScreen : {
+        screen: MessageScreen
+    },
     ForgotPassword : {
         screen: ForgotPassword,
         navigationOptions: () => ({
@@ -146,10 +150,10 @@ const Navigate = createStackNavigator({
     LinkToRegister: {screen : LinkToRegister},
 },
 {
-            headerMode: 'none',
-            navigationOptions: {
-              headerVisible: false,
-            },
+        headerMode: 'none',
+        navigationOptions: {
+            headerVisible: false,
+        },
         transitionConfig: TransitionConfiguration
 }
 );

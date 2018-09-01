@@ -39,7 +39,8 @@ class KTenTest extends Component {
             currentAnswer: 0,
             buttonText: "Next",
             scoreView: false,
-            score: 0
+            score: 0,
+            questionBarWidth: "10",
         }
     }
 
@@ -103,6 +104,8 @@ class KTenTest extends Component {
     }
 
     nextHandle = ()=> {
+        let tempProgressBar = 1;
+        tempProgressBar = ((100*(this.state.currentQuestionCounter+2))/(this.state.questions.length));
         if(this.state.buttonText == "Next") {
             this.responseHandle();
             let counter = this.state.currentQuestionCounter;
@@ -122,6 +125,7 @@ class KTenTest extends Component {
             this.submitAnswer();
             this.setState({scoreView: true, score: sum});
         }
+        this.setState({questionBarWidth: tempProgressBar});
     }
 
     // prevHandle = ()=> {
@@ -141,7 +145,10 @@ class KTenTest extends Component {
                     </View>
 
                     <View style={kTenTestStyles.questionWrapper}>
-                        <Text style={kTenTestStyles.question}>{this.state.currentQuestion+"?"}</Text>
+                        <View style={kTenTestStyles.totalQuestionsBar}>
+                            <View style={[kTenTestStyles.totalQuestionsBarStatus, {width: this.state.questionBarWidth+"%"}]}></View>
+                        </View>
+                        <Text style={kTenTestStyles.question}>{"Q"+(this.state.currentQuestionCounter+1) + ") "+ this.state.currentQuestion+"?"}</Text>
                         <FlatList
                             data={[
                                 {key: "option1", value: "0"},
@@ -185,8 +192,13 @@ class KTenTest extends Component {
             return (
                 <View style={kTenTestStyles.container}>
                 <ScrollView>
-                    <View>
-                        <Text style={kTenTestStyles.score}>Today's Score: {this.state.score}/50</Text>
+                <View style={kTenTestStyles.questionWrapper}>
+                        <View style={kTenTestStyles.totalQuestionsBar}>
+                            <View style={[kTenTestStyles.totalQuestionsBarStatus, {width: this.state.questionBarWidth+"%"}]}></View>
+                        </View>
+                        <View><Text style={kTenTestStyles.takenText}>Daily Test Taken</Text></View>
+                        <Text style={kTenTestStyles.scoreText}>Today's Score:</Text>
+                        <Text style={kTenTestStyles.score}>{this.state.score}/30</Text>
                     </View>
                     <View style={kTenTestStyles.scoreDetailWrapper}>
                         <Text style={kTenTestStyles.scoreDetail}>If you received a score between</Text>
@@ -208,24 +220,38 @@ const kTenTestStyles = StyleSheet.create({
         backgroundColor: "#f3f4f5"
     },
     personalisedMsgWrapper : {
-        margin: 15,
+        marginVertical: 15,
         backgroundColor: "#fff",
         borderRadius: 5
     },
     personalisedMsgText : {
-        padding: 15,
-        color: "#555",
-        fontSize: 15
+        padding: 16,
+        color: "#444",
+        fontSize: 15,
+        fontFamily: "OpenSans-SemiBold"
     },
     questionWrapper : {
-        margin: 20,
+        marginVertical: 20,
         backgroundColor: "#fff",
         borderRadius: 3,
         padding: 15
     },
+    totalQuestionsBar : {
+        height: 3,
+        backgroundColor: "lightblue",
+        marginBottom: 13,
+        marginLeft: -15,
+        marginRight: -15,
+        marginTop: -15
+    },
+    totalQuestionsBarStatus : {
+        height: 3,
+        backgroundColor: "blue"
+    },
     question : {
         fontSize: 23,
-        fontWeight: "700",
+        fontFamily: "OpenSans-Bold",
+        color: "#333"
     },
     optionButtons : {
         marginTop: 15,
@@ -233,7 +259,9 @@ const kTenTestStyles = StyleSheet.create({
         marginRight: 5,
         padding: 15,
         backgroundColor: "orange",
-        borderRadius: 10
+        borderRadius: 10,
+        width: "80%",
+        alignSelf: "center"
     },
     optionButtonHighlight : {
         marginTop: 15,
@@ -241,11 +269,14 @@ const kTenTestStyles = StyleSheet.create({
         marginRight: 5,
         padding: 15,
         backgroundColor: "green",
-        borderRadius: 10
+        borderRadius: 10,
+        width: "auto"
     },
     optionButtonsText : {
         fontSize: 15,
-        color: "#fff"
+        color: "#fff",
+        textAlign: "center",
+        fontFamily : "Roboto-Medium"
     },
     prevNextButtonWrapper : {
         display: "flex", 
@@ -253,15 +284,16 @@ const kTenTestStyles = StyleSheet.create({
         marginBottom: 30
     },
     prevNextButtons : {
-        backgroundColor: "green",
+        backgroundColor: "#FD6A02",
         borderRadius: 3,
         padding: 12,
         marginRight: 20,
         marginLeft: 20
     },
     prevNextButtonText : {
-        textAlign: "center",
-        color: "#fff"
+        alignSelf: "center",
+        color: "#fff",
+        fontFamily: "OpenSans-SemiBold"
     },
     score: {
         margin: 20,
@@ -274,6 +306,24 @@ const kTenTestStyles = StyleSheet.create({
     },
     scoreDetailWrapper : {
         padding: 30,
+    },
+    takenText : {
+        fontSize: 30,
+        fontFamily: "Raleway-Medium",
+        textAlign: "center",
+        margin: 20
+    },
+    scoreText : {
+        alignSelf: "flex-start",
+        fontSize: 16,
+        fontFamily: "Roboto-Medium",
+        marginTop: 20
+    },
+    score: {
+        alignSelf: "flex-end",
+        color: "#FD6A02",
+        fontSize: 50,
+        fontFamily: "Raleway-ExtraBold"
     },
     scoreDetail : {
         fontSize: 16,

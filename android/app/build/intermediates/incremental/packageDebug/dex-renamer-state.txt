@@ -1,4 +1,4 @@
-#Fri Aug 31 16:26:20 IST 2018
-base.0=/Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main
+#Fri Aug 31 18:15:10 IST 2018
+base.0=/Users/alien/Documents/infinityshark/appskeleton_react/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main
 renamed.0=classes.dex
-file.0=/Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex
+file.0=/Users/alien/Documents/infinityshark/appskeleton_react/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex

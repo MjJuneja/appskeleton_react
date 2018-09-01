@@ -124,7 +124,9 @@ class EmailRegister extends Component {
               console.log(data.data);
               let msg = "";
               if(data.data.message == "success") {
-                  msg = "Account created successfully."
+                  msg = "Account created successfully.";
+                  this._storeData(data.data.userData);
+                  this._handleNavigation('MessageScreen');
               } else {
                   msg = data.data.message;
               }
@@ -135,11 +137,23 @@ class EmailRegister extends Component {
                 console.log(err);  
           });
     }
+
+    _storeData = async (userData) => {
+        try {
+          userData = JSON.stringify(userData);
+          console.log(userData);
+          await AsyncStorage.setItem('userData', userData);
+          console.log("datastored");
+        } catch (error) {
+          // Error saving data
+          console.log(error);
+        }
+      }
     
-    _handleNavigation = ()=> {
+    _handleNavigation = (navigateTo)=> {
         console.log(this.props);
         const { navigate } = this.props.navigation;
-        navigate('Login');
+        navigate(navigateTo);
     }
 
     render() {
@@ -244,7 +258,7 @@ class EmailRegister extends Component {
                         <View style={registerStyle.loginContainer}>
                             <Text style={registerStyle.loginContainerText}>Already have an account?</Text>
                             <TouchableHighlight
-                                onPress={this._handleNavigation}
+                                onPress={this._handleNavigation.bind(this, 'Login')}
                             >
                                 <Text style={registerStyle.loginLink} onClick>Login Here</Text>
                             </TouchableHighlight>
