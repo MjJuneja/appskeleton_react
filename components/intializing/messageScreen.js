@@ -6,6 +6,8 @@ class MessageScreen extends Component {
     constructor(props) {
         super(props);
 
+        this._retrieveData();
+
         this.state = {
             greatful : [],
             currentGreatfulValue: "",
@@ -13,7 +15,8 @@ class MessageScreen extends Component {
                 userInfo : {
                     firstName: ""
                 }
-            }
+            },
+            duplicateError: ""
         }
     }
 
@@ -26,8 +29,10 @@ class MessageScreen extends Component {
             userData = JSON.parse(userData);
             console.log(userData);
             this.setState({userData});
+            this.getGreatfulAsync();
           } else {
               console.log("No data found");
+              this.handleNavigation("Home");
           }
          } catch (error) {
            // Error retrieving data
@@ -38,8 +43,41 @@ class MessageScreen extends Component {
     addGreatful = ()=> {
         if(this.state.currentGreatfulValue!="") {
             let greatful = this.state.greatful;
-            greatful.push(this.state.currentGreatfulValue);
-            this.setState({greatful, currentGreatfulValue: ""});
+            let duplicateCheck = false;
+            greatful.map((value)=>{
+                if(value==this.state.currentGreatfulValue) {
+                    duplicateCheck=true;
+                }
+            });
+            if(!duplicateCheck) {
+                greatful.push(this.state.currentGreatfulValue);
+                this.setState({greatful, currentGreatfulValue: "", duplicateError: ""});
+                this.setGreatfulAsyunc(greatful);
+            } else {
+                this.setState({duplicateError: "Already Exist"});
+            }
+        }
+    }
+
+    setGreatfulAsyunc = async (greatful)=> {
+        try {
+            greatful = JSON.stringify(greatful);
+            await AsyncStorage.setItem("greatful", greatful);
+            console.log("item set");
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
+    getGreatfulAsync = async ()=> {
+        try {
+            let greatful = await AsyncStorage.getItem("greatful");
+            if(greatful!=null) {
+                greatful = JSON.parse(greatful);
+                this.setState({greatful});
+            }
+        } catch(err) {
+            console.log(err);
         }
     }
 
@@ -47,6 +85,15 @@ class MessageScreen extends Component {
         console.log(this.props);
         const { navigate } = this.props.navigation;
         navigate(navigateTo);
+    }
+
+    deleteItem = (index)=> {
+        let greatful = this.state.greatful;
+        greatful.splice(index,1);
+        console.log(greatful);
+        this.setState({greatful});
+        this.setGreatfulAsyunc(greatful);
+        console.log("deleted", index);
     }
 
     render() {
@@ -75,7 +122,9 @@ class MessageScreen extends Component {
                     <Text style={messageScreenStyles.greatfulHeading}>Today I'm greatful for:</Text>
                     <View style={messageScreenStyles.inputContainer}>
                         <TextInput style={messageScreenStyles.greatfulInput} value={this.currentGreatfulValue}
-                        onChangeText={(currentGreatfulValue) => this.setState({currentGreatfulValue})}></TextInput>
+                        onChangeText={(currentGreatfulValue) => this.setState({currentGreatfulValue})}
+                        underlineColorAndroid='transparent'
+                        ></TextInput>
                         <TouchableOpacity
                             style={messageScreenStyles.addButton}
                             onPress={this.addGreatful}
@@ -83,18 +132,31 @@ class MessageScreen extends Component {
                             <Text style={messageScreenStyles.addButtonText}> + </Text>
                         </TouchableOpacity>
                     </View>
+                    <View>
+                        <Text style={{fontSize: 15, "color": "#e1e1e1", fontFamily:"Roboto-Bold"}}>{this.state.duplicateError}</Text>
+                    </View>
                 </View>
 
                 <View>
-                    {this.state.greatful.map((value, index)=>{
+
+                {this.state.greatful.map((value, index)=>{
                         return (
-                            <Text key={index} style={messageScreenStyles.greatfulList}>{(index+1)+". "+value}</Text>
+                            <View key={index} style={messageScreenStyles.greatfulListWrapper}>
+                                <Text style={messageScreenStyles.greatfulList}>{index+1}. {value}</Text>
+                                <TouchableOpacity
+                                    onPress={this.deleteItem.bind(this, index)}
+                                    style={messageScreenStyles.deleteButton}
+                                >
+                                    <Text style={messageScreenStyles.greatfulListClose}>X</Text>
+                                </TouchableOpacity>
+                            </View>
                         )
                     })}
                 </View>
 
                 <TouchableOpacity
                             onPress={this.handleNavigation.bind(this, "HomeScreen")}
+                            style={{marginTop: 20, marginBottom: 20}}
                         >
                     <Text style={{color: "#fff", fontSize: 20, width:"70%", padding:10, alignSelf: "center", textAlign:"center", backgroundColor:"rgba(0,0,0,0.2)", borderRadius: 3}}>Continue</Text>
                 </TouchableOpacity>
@@ -186,13 +248,35 @@ const messageScreenStyles = StyleSheet.create({
         fontSize: 30,
         color: "#fff"
     },
+    greatfulListWrapper : {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        paddingRight: 30,
+        alignSelf: "flex-start",
+        backgroundColor: "#fafafa",
+        marginBottom: 10,
+        marginLeft: 10,
+        borderRadius: 10
+    },
     greatfulList: {
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingBottom: 5,
         fontFamily: "Roboto-Medium",
         fontSize: 16,
-        color: "#fff"
+        color: "#444",
+        marginRight: 20
+    },
+    greatfulListClose : {
+        fontFamily: "OpenSans-Bold",
+        fontSize: 16,
+        color: "#fafafa",
+    },
+    deleteButton : {
+        position: "absolute",
+        right: 5,
+        top: 5,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        backgroundColor: "red",
+        borderRadius: 20
     }
 });
 

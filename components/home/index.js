@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {StyleSheet, View, Text, Slider, Image, ScrollView, ProgressBarAndroid, TouchableOpacity, FlatList, AsyncStorage, Button} from 'react-native';
+import {StyleSheet, View, Text, Slider, Image, ScrollView, BackHandler, ProgressBarAndroid, TouchableOpacity, FlatList, AsyncStorage, Button} from 'react-native';
 import SplashScreen from "../splashscreen";
 import Toast, {DURATION} from 'react-native-easy-toast';
 import axios from 'axios';
@@ -7,12 +7,25 @@ import Carousel from 'react-native-snap-carousel';
 import BottomNavigation,{FullTab} from 'react-native-material-bottom-navigation'
 import { Icon } from 'react-native-elements'
 import Voice from 'react-native-voice';
+import moment from 'moment';
+
+import { BarChart, Grid } from 'react-native-svg-charts'
+import * as shape from 'd3-shape';
+
+
+import AlertBox from '../alert';
+
+const fill = 'rgb(134, 65, 244)'
+const data   = [ 50, 10, 40, 95, -4, -24, null, 85, undefined, 0, 35, 53, -53, 24, 50, -20, -80 ]
 
 class Home extends Component {
 
     constructor(props) {
         super(props);
-
+        let quoteDate = moment().toDate().getDate();
+        if(quoteDate==31) {
+            quoteDate = 1;
+        }
         this._retrieveData();
 
         this.state = {
@@ -138,6 +151,7 @@ class Home extends Component {
                     author: "William James"
                 }
             ],
+            quoteDate,
             currentQuestion: "About how often did you feel tired out for no good reason",
             currentQuestionCounter: 0,
             options: [
@@ -165,43 +179,10 @@ class Home extends Component {
                 "If 1 is the most depressed you have ever felt and 10 is the most happiest you have every felt, what number would you put yourself now",
                 "If 1 is the most anxious you have ever felt and 10 is the most relaxed you have ever felt, what number would you put yourself now"
             ],
-            results : [],
-            partialResult: [],
-            content: "",
-            micFlag: false
+            showAlert: false,
+            splashScreenActive: true,
+            timeRemaining: 0
         }
-        Voice.onSpeechResults = this.onSpeechResults.bind(this);
-        Voice.onSpeechPartialResults =  this.onSpeechPartialResults.bind(this);
-    }
-
-    onSpeechResults(e) {
-        let content = this.state.content;
-        content+=" "+e.value[0];
-        this.setState ({
-            results:e.value[0],
-            content
-        });
-        console.log("content", content);
-        this.submitVoice(content);
-        // this.onSpeechStart();
-    // ToastAndroid.show(e.value , ToastAndroid.LONG);
-    }
-
-    onSpeechPartialResults(e) {
-        this.setState({
-            partialResult : e.value[0]
-        });
-        console.log(e.value[0]);
-    }
-
-    onSpeechStart(){
-        // alert("inside");
-         Voice.start('en-US');
-        //  ToastAndroid.show(spokenText , ToastAndroid.LONG);
-    }
-
-    onSpeechEnd(e) {
-        Voice.stop();
     }
 
 
@@ -257,7 +238,9 @@ class Home extends Component {
             // We have data!!
             userData = JSON.parse(userData);
             console.log(userData);
+            this.checkToken(userData.sessionId);
             this.setState({userData});
+            this.getTestStatus();
           } else {
               console.log("No data found");
           }
@@ -267,12 +250,77 @@ class Home extends Component {
          }
       }
 
+      checkToken = token => {
+        axios({
+            method: 'post',
+            url: 'http://13.238.16.112/answer/getAnswer',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'token '+token
+            },
+            data: {
+              "fromDate":"2018-08-19T00:00:00.000Z",
+              "toDate":"2018-08-20T00:00:00.000Z"
+            }
+          }).then(data => {
+              console.log(data.data);
+              if(data.data.message=="Access denied") {
+                this._removeData();
+                this._handleNavigation('Home');
+              } else {
+                  console.log("access granted");
+                
+              }
+          }).catch(err=>{
+                console.log(err);
+          });
+      }
+      
+      _removeData = async()=> {
+        console.log("removing data");
+        try {
+          const userData = await AsyncStorage.removeItem('userData');
+         } catch (error) {
+           // Error retrieving data
+           console.log(error);
+         }
+      }
+
     componentDidMount() {
         console.log("component mounted");
-        if(this.state.micFlag) {
-          this.onSpeechStart();
-        }
-      }
+        const { navigate } = this.props.navigation;
+        console.log(this.props);
+    }
+
+    getTestStatus = ()=> {
+
+        console.log("loading test status...");
+        axios({
+            method: 'post',
+            url: 'http://13.238.16.112/answer/check-test',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'token '+this.state.userData.sessionId
+            },
+            data: {
+                "type":"home"
+            }
+          }).then(data => {
+              console.log(data.data);
+              if(data.data.message == "get ready for test") {
+                  console.log("test dele bhai");
+                  this.setState({scoreView: false})
+              } else {
+                  this.setState({scoreView: true, questionBarWidth: 100, score: data.data.previousScore});
+              }
+            //   this.refs.toast.show(data.data.message, 1000, () => {
+            //     // something you want to do at close
+            // });
+            this.setState({splashScreenActive: false});
+          }).catch(err=>{
+                console.log(err);  
+          });
+    }
 
     submitAnswer = ()=> {
         console.log("in submit", this.state.sliderValue);
@@ -286,46 +334,6 @@ class Home extends Component {
             data: {
                 "type":"home",
                 "points":this.state.sliderValue
-            }
-          }).then(data => {
-              console.log(data.data);
-              this.refs.toast.show(data.data.message, 1000, () => {
-                // something you want to do at close
-            });
-          }).catch(err=>{
-                console.log(err);  
-          });
-    }
-
-    submitVoice = content => {
-        axios({
-            method: 'post',
-            url: 'http://13.238.16.112/sentiment/create',
-            headers : {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'token '+this.state.userData.sessionId
-            },
-            data: {
-                "content": content
-            }
-          }).then(data => {
-              console.log(data.data);
-              this.refs.toast.show(data.data.message, 1000, () => {
-                // something you want to do at close
-            });
-          }).catch(err=>{
-                console.log(err);  
-          });
-
-          axios({
-            method: 'post',
-            url: 'http://13.238.16.112/words/create',
-            headers : {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'token '+this.state.userData.sessionId
-            },
-            data: {
-                "content": content
             }
           }).then(data => {
               console.log(data.data);
@@ -351,13 +359,6 @@ class Home extends Component {
             this.submitAnswer();
             this.setState({scoreView: true, score: sum});
     }
-
-    // prevHandle = ()=> {
-    //     let counter = this.state.currentQuestionCounter;
-    //     if(counter!=0) {
-    //         this.setState({currentQuestionCounter: counter-1, currentQuestion: this.state.questions[counter-1]})
-    //     }
-    // }
 
     sliderValueHandler = (i, value) => {
         console.log("i= ",i, " value= ",value);
@@ -409,40 +410,51 @@ class Home extends Component {
       }
 
     render() {
+        const {showAlert} = this.state;
+        // const fill = 'rgb(134, 65, 244)';
+        // const data   = [ 50, 10, 40, 95, -4, -24, null, 85, undefined, 0, 35, 53, -53, 24, 50, -20, -80 ];
+
             return(
-                this.state.loading ? <View><Text>Loading...</Text></View> : 
+                this.state.splashScreenActive ? <SplashScreen /> : 
                 <View style={kTenTestStyles.container}>
+                
+                <AlertBox showAlert={this.state.showAlert}/>
                  <BottomNavigation
                     renderTab={this.renderTab}
                     tabs={this.tabs}
                     onTabPress={activeTab => this._handleNavigation(activeTab.navigate)}
                 /> 
-                {/* <Button title="Start speech"
-               onPress={this.onSpeechStart.bind()}
-                 />
-                 <Button title="Stop speech"
-               onPress={this.onSpeechEnd.bind()}
-                 /> */}
-                 <Text>{this.state.results}</Text>
                 <Toast ref="toast"  position='top'/>
+                <BarChart
+                style={{ height: 200 }}
+                data={ data }
+                svg={{ fill }}
+                contentInset={{ top: 30, bottom: 30 }}
+            >
+                <Grid/>
+            </BarChart>
+                <TouchableOpacity
+                    onPress={this._handleNavigation.bind(this, "EmotionScreen")}
+                    style={kTenTestStyles.emotionButton}
+                >
+                    <Image
+                        style={kTenTestStyles.emotionButtonImage}
+                        source={require ('../../assets/images/mood/smilewhite.png')}
+                    />
+                </TouchableOpacity>
                 <ScrollView>
+                    
                 <View style={kTenTestStyles.personalisedMsgWrapper}>
-                        {/* <Image
-                            style={kTenTestStyles.tipOfTheDayBackground}
-                            source={require ('../../assets/images/gradients/tipoftheday.jpg')}
-                        />  */}
                         <View style={kTenTestStyles.tipOfTheDayHeadingContainer}>
-                            <Text style={kTenTestStyles.tipOfTheDayHeading}>Tip of the Day</Text>
+                            <Text style={kTenTestStyles.tipOfTheDayHeading}>Quote of the Day</Text>
                             <Icon size={30} color="#FD6A02" containerStyle={kTenTestStyles.tipOfTheDayIcon} name={"flag"} />
                         </View>
-                        <Text style={kTenTestStyles.tipOfTheDayQuote}>"{this.state.quotes[0].quote}"</Text>
-                        <Text style={kTenTestStyles.tipOfTheDayAuthor}> {'- '+this.state.quotes[0].author}</Text>
+                        <Text style={kTenTestStyles.tipOfTheDayQuote}>"{this.state.quotes[this.state.quoteDate].quote}"</Text>
+                        <Text style={kTenTestStyles.tipOfTheDayAuthor}> {'- '+this.state.quotes[this.state.quoteDate].author}</Text>
                     </View>
                     {!this.state.scoreView ?
                    ( 
                    <View>
-
-                    {/* <ProgressBarAndroid styleAttr="Horizontal" color="#2196F3" /> */}
 
                     <View style={kTenTestStyles.questionWrapper}>
                         <View style={kTenTestStyles.totalQuestionsBar}>
@@ -468,31 +480,8 @@ class Home extends Component {
                         />
                     </View>
                     <Text style={{alignSelf:"flex-end", fontSize: 50, fontFamily:"Raleway-ExtraBold", padding: 20, color: "#FD6A02"}}>{this.state.sliderValue[this.state.currentQuestionCounter]}</Text>
-{/* <Text style={kTenTestStyles.question}>Q2) If 1 is the most depressed you have ever felt and 10 is the most happiest you have every felt, what number would you put yourself now?</Text>
-<Slider
-                            minimumValue={1}
-                            maximumValue={10}
-                            step={1}
-                            onValueChange={this.sliderValueHandler.bind(this, 1)}
-                        />
-                        <Text>{this.state.sliderValue[1]}</Text>
-<Text style={kTenTestStyles.question}>Q3) If 1 is the most anxious you have ever felt and 10 is the most relaxed you have ever felt, what number would you put yourself now?</Text>
-<Slider
-                            minimumValue={1}
-                            maximumValue={10}
-                            step={1}
-                            onValueChange={this.sliderValueHandler.bind(this, 2)}
-                        />
-                        <Text>{this.state.sliderValue[2]}</Text> */}
+
                     <View style={kTenTestStyles.prevNextButtonWrapper}>
-                            {/* <View style={{flex: 1}}>
-                                <TouchableOpacity
-                                style={kTenTestStyles.prevNextButtons}
-                                onPress={this.prevHandle}
-                                >
-                                    <Text style={kTenTestStyles.prevNextButtonText}>Previous</Text>
-                                </TouchableOpacity>
-                            </View> */}
                             <View style={{flex: 1}}>
                                 <TouchableOpacity
                                     style={kTenTestStyles.prevNextButtons}
@@ -506,14 +495,19 @@ class Home extends Component {
                     : 
                    (
                     <View>   
+                        <TouchableOpacity
+                            onPress={this._handleNavigation.bind(this, "HomeQuestionChart")}
+                        >
                     <View style={[kTenTestStyles.questionWrapper, kTenTestStyles.questionWrapperTaken]}>
                         <View style={kTenTestStyles.totalQuestionsBar}>
                             <View style={[kTenTestStyles.totalQuestionsBarStatus, {width: this.state.questionBarWidth+"%"}]}></View>
                         </View>
-                        <View><Text style={kTenTestStyles.takenText}>Daily Test Taken</Text></View>
+                        <View><Text style={kTenTestStyles.takenText}>Solution Focus Test Score</Text></View>
                         <Text style={kTenTestStyles.scoreText}>Today's Score:</Text>
                         <Text style={kTenTestStyles.score}>{this.state.score}/30</Text>
+                        {/* <Text>{this.state.timeRemaining}</Text> */}
                     </View>
+                    </TouchableOpacity>
 
 
                         </View>)
@@ -529,6 +523,19 @@ const kTenTestStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#f4f5f8"
+    },
+    emotionButton : {
+        position: "absolute",
+        bottom: 20,
+        right: 20,
+        backgroundColor : "orangered",
+        zIndex: 10,
+        padding: 15,
+        borderRadius: 35
+    },
+    emotionButtonImage : {
+        height: 30,
+        width: 30
     },
     personalisedMsgWrapper : {
         position: "relative",

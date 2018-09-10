@@ -1,0 +1,169 @@
+import React, {Component} from "react";
+import {StyleSheet, View, Text, Image, TextInput, TouchableOpacity, AsyncStorage} from 'react-native';
+import SplashScreen from "../splashscreen";
+import Toast, {DURATION} from 'react-native-easy-toast'
+import axios from 'axios';
+import md5 from 'md5';
+
+class ChangeMobile extends Component {
+    constructor(props) {
+        super(props);
+
+        this._retrieveData();
+
+        this.state = {
+            userData: {},
+            mobile: "",
+            mobileValidationMsg: ""
+        };
+    }
+
+    _retrieveData = async () => {
+        console.log("in retrieve data");
+        try {
+          const userData = await AsyncStorage.getItem('userData');
+          if (userData !== null) {
+            // We have data!!
+            userData = JSON.parse(userData);
+            console.log(userData);
+            this.setState({
+                userData,
+                mobile: userData.mobile
+            });
+          } else {
+              console.log("No data found");
+          }
+         } catch (error) {
+           // Error retrieving data
+           console.log(error);
+         }
+      }
+
+    validateUsername = username => {
+        var re = /^([a-zA-Z0-9_.]{5,20})$/;
+        return re.test(username);
+    }
+    usernameValidation = username => {
+        if(this.validateUsername(username)) {
+            this.setState({usernameValidationMsg : ""});
+        } else {
+            this.setState({usernameValidationMsg: "Invalid username(Should have only a-z,0-9,.,_ and 5-20 chars,without any spaces)"});
+        }
+    }
+
+    loginHandle = ()=> {
+        axios({
+            method: 'post',
+            url: 'http://13.238.16.112/profile/updateMobile',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'token '+this.state.userData.sessionId
+            },
+            data: {
+                "mobile": this.state.mobile
+            }
+          }).then(data => {
+              console.log(data.data);
+              this.refs.toast.show(data.data.message, 1000, () => {
+                // something you want to do at close
+            });
+          }).catch(err=>{
+                console.log(err);  
+          });
+    }
+
+    render() {
+        return(
+            <View style={loginStyle.container}>
+                <Toast ref="toast"  position='top'/>
+                <View style={loginStyle.formContainer}>
+                <Text style={loginStyle.headingText}>ENTER THE NEW USERNAME</Text>
+                    <View>
+
+                        <View>
+                            {/* <Text>New Username: </Text> */}
+                            <TextInput
+                                placeholder = "New Mobile"
+                                style={loginStyle.input}
+                                onChangeText={(mobile) => {this.setState({mobile}); this.mobileValidation(mobile)}}
+                                value={this.state.mobile}
+                            />
+                            <Text>{this.state.mobileValidationMsg}</Text>
+                        </View>
+
+                        <TouchableOpacity
+                            style={loginStyle.loginButton}
+                            onPress={this.loginHandle}
+                        >
+                            <Text style={loginStyle.loginButtonText}> Update Mobile  </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+}
+
+const loginStyle = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#f4f5f8"
+    },
+    logo : {
+        height: 120,
+        width: 100,
+        alignSelf: "center"
+    },
+    headingText : {
+        color: "#999",
+        fontSize: 13,
+        alignSelf: "center",
+        marginBottom: 20
+    },
+    formContainer : {
+        flex: 1,
+        justifyContent: "center",
+        padding: 20
+    },
+    loginHeading : {
+        marginTop: 20,
+        marginBottom: 20,
+        fontSize: 25,
+        alignSelf: "center",
+        color: "#222"
+    },
+    input : {
+        height: 40,
+        borderColor: "#e1e1e1", 
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 5,
+        color: "#333",
+        backgroundColor: "#fff",
+        fontFamily: "Roboto-Regular",
+    },
+    loginButton : {
+        height: 40,
+        backgroundColor: "#FF7417",
+        alignSelf: "stretch",
+        justifyContent: "center",
+        borderRadius: 5
+    },
+    loginButtonText : {
+        alignSelf: "center",
+        color: "#fff",
+        fontFamily: "OpenSans-SemiBold"
+    },
+    helpContainer : {
+        flexDirection: "row",
+        marginTop: 30
+    },
+    forgotPasswordContainer : {
+        flex: 1
+    },
+    registerContainer : {
+        flex: 1
+    }
+});
+
+export default ChangeMobile;

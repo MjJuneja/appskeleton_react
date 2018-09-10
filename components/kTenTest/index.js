@@ -5,6 +5,9 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import axios from 'axios';
 import Carousel from 'react-native-snap-carousel';
 
+import BottomNavigation,{FullTab} from 'react-native-material-bottom-navigation';
+import { Icon } from 'react-native-elements'
+
 class KTenTest extends Component {
 
     constructor(props) {
@@ -13,7 +16,11 @@ class KTenTest extends Component {
         this._retrieveData();
 
         this.state = {
-            userData: {},
+            userData: {
+                userInfo: {
+                    firstName: ""
+                }
+            },
             questions : [
                 "About how often did you feel tired out for no good reason",
                 "About how often did you feel nervous",
@@ -36,11 +43,12 @@ class KTenTest extends Component {
                 "All of the time"
             ],
             answers : [],
-            currentAnswer: 0,
+            currentAnswer: 1,
             buttonText: "Next",
             scoreView: false,
             score: 0,
             questionBarWidth: "10",
+            splashScreenActive: true
         }
     }
 
@@ -52,9 +60,11 @@ class KTenTest extends Component {
             // We have data!!
             userData = JSON.parse(userData);
             console.log(userData);
+            this.checkToken(userData.sessionId);
             this.setState({
                 userData
             });
+            this.getTestStatus();
           } else {
               console.log("No data found");
           }
@@ -63,6 +73,70 @@ class KTenTest extends Component {
            console.log(error);
          }
       }
+
+      checkToken = token => {
+      axios({
+          method: 'post',
+          url: 'http://13.238.16.112/answer/getAnswer',
+          headers : {
+              'Content-Type' : 'application/json',
+              'Authorization' : 'token '+token
+          },
+          data: {
+            "fromDate":"2018-08-19T00:00:00.000Z",
+            "toDate":"2018-08-20T00:00:00.000Z"
+          }
+        }).then(data => {
+            console.log(data.data);
+            if(data.data.message=="Access denied") {
+              this._removeData();
+              this._handleNavigation('Home');
+            } else {
+                console.log("access granted");
+            }
+        }).catch(err=>{
+              console.log(err);
+        });
+    }
+    
+    _removeData = async()=> {
+      console.log("removing data");
+      try {
+        const userData = await AsyncStorage.removeItem('userData');
+       } catch (error) {
+         // Error retrieving data
+         console.log(error);
+       }
+    }
+
+      getTestStatus = ()=> {
+
+        console.log("loading test status...");
+        axios({
+            method: 'post',
+            url: 'http://13.238.16.112/answer/check-test',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'token '+this.state.userData.sessionId
+            },
+            data: {
+                "type":"question"
+            }
+          }).then(data => {
+              console.log(data.data);
+              if(data.data.message == "get ready for test") {
+                  console.log("test dele bhai");
+                  this.setState({scoreView: false})
+              } else {
+                  this.setState({scoreView: true, questionBarWidth: 100, score: data.data.previousScore});
+              }
+              this.setState({splashScreenActive: false});
+              console.log("after splash screen");
+              
+          }).catch(err=>{
+                console.log(err);  
+          });
+    }
 
     submitAnswer = ()=> {
         console.log("in submit", this.state.answers);
@@ -87,6 +161,12 @@ class KTenTest extends Component {
           });
     }
 
+    _handleNavigation = (navigateTo)=> {
+        console.log(navigateTo);
+        const { navigate } = this.props.navigation;
+        navigate(navigateTo);
+    }
+
     selectedAnswerHandle = value => {
         console.log(value);
         this.setState({currentAnswer: value});
@@ -100,7 +180,7 @@ class KTenTest extends Component {
             this.setState({answers: temp});
             console.log(temp);
         }
-        this.setState({currentAnswer: 0});
+        this.setState({currentAnswer: 1});
     }
 
     nextHandle = ()=> {
@@ -135,13 +215,92 @@ class KTenTest extends Component {
     //     }
     // }
 
+    tabs = [
+        {
+          key: 'home',
+          icon: 'home',
+          navigate: 'HomeScreen',
+          label: 'Home',
+          barColor: '#388E3C',
+          pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
+          key: 'analysis',
+          icon: 'assessment',
+          navigate: 'Analysis',
+          label: 'Analysis',
+          barColor: '#B71C1C',
+          pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
+          key: 'kten',
+          icon: 'assignment',
+          navigate: 'KTenTest',
+          label: 'K10',
+          barColor: '#E64A19',
+          pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
+          key: 'videos',
+          icon: 'videocam',
+          navigate: 'VideosList',
+          label: 'Videos',
+          barColor: '#388E3C',
+          pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
+            key: 'settings',
+            icon: 'settings',
+            navigate: 'Settings',
+            label: 'Settings',
+            barColor: '#ff3782',
+            pressColor: 'rgba(255, 255, 255, 0.16)'
+        }
+      ]
+
+      renderIcon = icon => ({ isActive }) => (
+        <Icon size={16} color="white" name={icon} />
+      )
+    
+       renderTab = ({ tab, isActive }) => {
+        return (
+          <FullTab
+            style = {{marginLeft:-10}} 
+            key={tab.key}
+            isActive={isActive}
+            label={tab.label}
+            renderIcon={this.renderIcon(tab.icon)}
+          />
+        )
+      }
+
+
+
     render() {
+        if(this.state.splashScreenActive) {
+            return <SplashScreen />
+        } else {
         if(!this.state.scoreView) {
             return(
                 <View style={kTenTestStyles.container}>
+                <TouchableOpacity
+                    onPress={this._handleNavigation.bind(this, "EmotionScreen")}
+                    style={kTenTestStyles.emotionButton}
+                >
+                    <Image
+                        style={kTenTestStyles.emotionButtonImage}
+                        source={require ('../../assets/images/mood/smilewhite.png')}
+                    />
+                </TouchableOpacity>
+                <BottomNavigation
+                renderTab={this.renderTab}
+                tabs={this.tabs}
+                onTabPress={activeTab => this._handleNavigation(activeTab.navigate)}
+            /> 
                 <ScrollView>
                     <View style={kTenTestStyles.personalisedMsgWrapper}>
-                        <Text style={kTenTestStyles.personalisedMsgText}>Hey Vishal, this is a K10 test to keep a record of your mood on a daily basis. You can take the test only once a day, anytime you want. We will keep a track of your mood on a daily basis to see whether practicing gratitude and monitoring your speech changes your results for your mood over time.</Text>
+                        <Text style={kTenTestStyles.disclaimer}>Disclaimer - This test is not intended to be a replacement for treatment nor any sort of medical intervention.{"\n"}You are only required to do this test once a day.</Text>
+                        <Text style={kTenTestStyles.personalisedMsgText}>Hey {this.state.userData.userInfo.firstName}, this is a K10 test to keep a record of your mood on a daily basis. You can take the test only once a day, anytime you want. We will keep a track of your mood on a daily basis to see whether practicing gratitude and monitoring your speech changes your results for your mood over time.</Text>
                     </View>
 
                     <View style={kTenTestStyles.questionWrapper}>
@@ -191,15 +350,31 @@ class KTenTest extends Component {
         } else {
             return (
                 <View style={kTenTestStyles.container}>
+                <TouchableOpacity
+                    onPress={this._handleNavigation.bind(this, "EmotionScreen")}
+                    style={kTenTestStyles.emotionButton}
+                >
+                    <Icon size={25} color={"white"} name={"tune"} />
+                </TouchableOpacity>
+                <BottomNavigation
+                renderTab={this.renderTab}
+                tabs={this.tabs}
+                onTabPress={activeTab => this._handleNavigation(activeTab.navigate)}
+            /> 
                 <ScrollView>
+                <TouchableOpacity
+                            onPress={this._handleNavigation.bind(this, "KTenTestQuestionChart")}
+                        >
                 <View style={kTenTestStyles.questionWrapper}>
                         <View style={kTenTestStyles.totalQuestionsBar}>
                             <View style={[kTenTestStyles.totalQuestionsBarStatus, {width: this.state.questionBarWidth+"%"}]}></View>
                         </View>
-                        <View><Text style={kTenTestStyles.takenText}>Daily Test Taken</Text></View>
+                        <Text style={kTenTestStyles.disclaimerTaken}>Disclaimer - This test is not intended to be a replacement for treatment nor any sort of medical intervention.{"\n"}You are only required to do this test once a day.</Text>
+                        <View><Text style={kTenTestStyles.takenText}>Solution Focus Test Score</Text></View>
                         <Text style={kTenTestStyles.scoreText}>Today's Score:</Text>
-                        <Text style={kTenTestStyles.score}>{this.state.score}/30</Text>
+                        <Text style={kTenTestStyles.score}>{this.state.score}/50</Text>
                     </View>
+                    </TouchableOpacity>
                     <View style={kTenTestStyles.scoreDetailWrapper}>
                         <Text style={kTenTestStyles.scoreDetail}>If you received a score between</Text>
                         <Text style={kTenTestStyles.scoreDetail}>10 - 19 You are likely to be well</Text>
@@ -212,12 +387,40 @@ class KTenTest extends Component {
             )
         }
     }
+    }
 }
 
 const kTenTestStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#f3f4f5"
+    },
+    emotionButton : {
+        position: "absolute",
+        bottom: 20,
+        right: 20,
+        backgroundColor : "orangered",
+        zIndex: 10,
+        padding: 15,
+        borderRadius: 35
+    },
+    emotionButtonImage : {
+        height: 30,
+        width: 30
+    },
+    disclaimer : {
+        color: "#C21807",
+        padding: 16,
+        paddingBottom: 0,
+        fontSize: 15,
+        fontFamily: "OpenSans-Bold"
+    },
+    disclaimerTaken : {
+        color: "#C21807",
+        padding: 5,
+        paddingBottom: 0,
+        fontSize: 15,
+        fontFamily: "OpenSans-Bold"
     },
     personalisedMsgWrapper : {
         marginVertical: 15,

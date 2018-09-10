@@ -1,5 +1,9 @@
 [
     {
+        "merged": "/Users/alien/Documents/infinityshark/appskeleton_react/android/app/build/intermediates/res/merged/release/mipmap-xxhdpi/ic_launcher.png",
+        "source": "/Users/alien/Documents/infinityshark/appskeleton_react/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
         "merged": "/Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/res/merged/release/mipmap-xxhdpi/ic_launcher.png",
         "source": "/Users/mukuljuneja/Desktop/trial/appskeleton/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
     }

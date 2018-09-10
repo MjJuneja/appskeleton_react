@@ -66,6 +66,8 @@ ADDED from /Users/alien/Documents/infinityshark/appskeleton_react/android/app/sr
 		ADDED from /Users/alien/Documents/infinityshark/appskeleton_react/android/app/src/main/AndroidManifest.xml:23:17-81
 uses-sdk
 INJECTED from /Users/alien/Documents/infinityshark/appskeleton_react/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [appskeleton:react-native-volume-controller:unspecified] /Users/alien/Documents/infinityshark/appskeleton_react/android/app/build/intermediates/exploded-aar/appskeleton/react-native-volume-controller/unspecified/AndroidManifest.xml:7:5-9:41
+MERGED from [appskeleton:react-native-svg:unspecified] /Users/alien/Documents/infinityshark/appskeleton_react/android/app/build/intermediates/exploded-aar/appskeleton/react-native-svg/unspecified/AndroidManifest.xml:5:5-7:41
 MERGED from [appskeleton:react-native-youtube:unspecified] /Users/alien/Documents/infinityshark/appskeleton_react/android/app/build/intermediates/exploded-aar/appskeleton/react-native-youtube/unspecified/AndroidManifest.xml:7:5-9:41
 MERGED from [appskeleton:react-native-vector-icons:unspecified] /Users/alien/Documents/infinityshark/appskeleton_react/android/app/build/intermediates/exploded-aar/appskeleton/react-native-vector-icons/unspecified/AndroidManifest.xml:7:5-9:41
 MERGED from [appskeleton:react-native-voice:unspecified] /Users/alien/Documents/infinityshark/appskeleton_react/android/app/build/intermediates/exploded-aar/appskeleton/react-native-voice/unspecified/AndroidManifest.xml:8:5-11:54

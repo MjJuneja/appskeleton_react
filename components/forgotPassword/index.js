@@ -20,14 +20,22 @@ class Login extends Component {
         return re.test(email);
     }
     emailValidation = email => {
+        let emailValidationMsg = "";
         if(this.validateEmail(email)) {
-            this.setState({emailValidationMsg : ""});
+            this.setState({emailValidationMsg});
         } else {
-            this.setState({emailValidationMsg: "Enter a valid email address"});
+            emailValidationMsg = "Enter a valid email address";
+            this.setState({emailValidationMsg});
         }
+        return emailValidationMsg;
     }
 
     loginHandle = ()=> {
+
+        let emailValidationMsg = this.emailValidation(this.state.email);
+
+        if(emailValidationMsg=="") {
+
         this.refs.toast.show("Sending link...", 500, () => {
             // something you want to do at close
         });
@@ -48,6 +56,7 @@ class Login extends Component {
           }).catch(err=>{
                 console.log(err);  
           });
+        }
     }
 
     render() {
@@ -57,7 +66,7 @@ class Login extends Component {
                 <View style={loginStyle.formContainer}>
                     <Image
                         style={loginStyle.logo}
-                        source={require ('../../assets/images/logo/LogoWatchYourTalk.jpg')}
+                        source={require ('../../assets/images/logo/logo.png')}
                     />
                     <Text style={loginStyle.loginHeading}>Watch Your Talk</Text>
                     <View>
@@ -67,8 +76,9 @@ class Login extends Component {
                             onChangeText={(email) => {this.setState({email}); this.emailValidation(email)}}
                             value={this.state.email}
                             keyboardType = "email-address"
+                            underlineColorAndroid='transparent'
                         />
-                        <Text style={{marginTop: -10, marginBottom: 10}}>{this.state.emailValidationMsg}</Text>
+                        <Text style={loginStyle.errorMsg}>{this.state.emailValidationMsg}</Text>
                         <TouchableOpacity
                             style={loginStyle.loginButton}
                             onPress={this.loginHandle}
@@ -85,12 +95,18 @@ class Login extends Component {
 const loginStyle = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff"
+        backgroundColor: "#f4f5f8"
     },
     logo : {
         height: 120,
         width: 100,
         alignSelf: "center"
+    },
+    headingText : {
+        color: "#999",
+        fontSize: 13,
+        alignSelf: "center",
+        marginBottom: 20
     },
     formContainer : {
         flex: 1,
@@ -106,20 +122,25 @@ const loginStyle = StyleSheet.create({
     },
     input : {
         height: 40,
-        borderColor: "#e9e9e9", 
+        borderColor: "#e1e1e1", 
         borderWidth: 1,
-        marginBottom: 10,
-        padding: 10
+        padding: 10,
+        borderRadius: 5,
+        color: "#333",
+        backgroundColor: "#fff",
+        fontFamily: "Roboto-Regular",
     },
     loginButton : {
         height: 40,
-        backgroundColor: "#00ff00",
+        backgroundColor: "#FF7417",
         alignSelf: "stretch",
-        justifyContent: "center"
+        justifyContent: "center",
+        borderRadius: 5
     },
     loginButtonText : {
-        color: "#000",
-        alignSelf: "center"
+        alignSelf: "center",
+        color: "#fff",
+        fontFamily: "OpenSans-SemiBold"
     },
     helpContainer : {
         flexDirection: "row",
@@ -130,7 +151,13 @@ const loginStyle = StyleSheet.create({
     },
     registerContainer : {
         flex: 1
+    },
+    errorMsg : {
+        color: "red",
+        marginBottom: 10
     }
 });
 
 export default Login;
+
+

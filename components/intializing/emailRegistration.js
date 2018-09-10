@@ -1,8 +1,9 @@
 import React, {Component} from "react";
-import {StyleSheet, View, Text, Button, ScrollView, TextInput, TouchableOpacity, TouchableHighlight, Linking} from 'react-native';
+import {StyleSheet, View, Text, Button, ScrollView, TextInput, TouchableOpacity, TouchableHighlight, Linking, AsyncStorage} from 'react-native';
 import axios from 'axios';
 import md5 from 'md5';
 import Toast, {DURATION} from 'react-native-easy-toast'
+import {CheckBox} from 'react-native-elements';
 
 class EmailRegister extends Component {
     constructor(props) {
@@ -12,9 +13,10 @@ class EmailRegister extends Component {
             "userEmail":"",
             "username":"",
             "password":"",
+            "confirmPassword" : "",
             "firstName":"",
             "lastName":"",
-            "code":"+91",
+            "code":"+61",
             "mobile":"",
             "role":"customer",
             "emailValidationMsg" : "",
@@ -22,9 +24,11 @@ class EmailRegister extends Component {
             "firstNameValidationMsg" : "",
             "lastNameValidationMsg" : "",
             "passwordValidationMsg" : "",
-            "confirmPasswordValidateMsg" : "",
+            "confirmPasswordValidationMsg" : "",
             "mobileValidationMsg" : "",
-            "loading" : false
+            "loading" : false,
+            "checked" : false,
+            "termErrorMsg": ""
         };
     }
 
@@ -35,11 +39,14 @@ class EmailRegister extends Component {
         return re.test(email);
     }
     emailValidation = email => {
+        let emailValidationMsg = "";
         if(this.validateEmail(email)) {
             this.setState({emailValidationMsg : ""});
         } else {
-            this.setState({emailValidationMsg: "Enter a valid email address"});
+            emailValidationMsg = "Enter a valid email address";
+            this.setState({emailValidationMsg});
         }
+        return emailValidationMsg;
     }
 
 
@@ -48,19 +55,36 @@ class EmailRegister extends Component {
         return re.test(username);
     }
     usernameValidation = username => {
+        let usernameValidationMsg = "";
         if(this.validateUsername(username)) {
             this.setState({usernameValidationMsg : ""});
         } else {
-            this.setState({usernameValidationMsg: "Invalid username(Should have only a-z,0-9,.,_ and 5-20 chars,without any spaces)"});
+            usernameValidationMsg = "Invalid username(Should have only a-z,0-9,.,_ and 5-20 chars,without any spaces)";
+            this.setState({usernameValidationMsg});
         }
+        return usernameValidationMsg;
     }
 
     nameValidation = (name, position) => {
+        let firstNameValidationMsg = "";
+        let lastNameValidationMsg = "";
         if(name == "") {
             if(position == 1) {
-                this.setState({firstNameValidationMsg: "First Name cannot be empty"});
+                firstNameValidationMsg = "First Name cannot be empty"
+                this.setState({firstNameValidationMsg});
+                return firstNameValidationMsg;
             } else {
+                lastNameValidationMsg = "Last Name cannot be empty"
                 this.setState({lastNameValidationMsg: "Last Name cannot be empty"});
+                return lastNameValidationMsg;
+            }
+        } else {
+            if (position == 1) {
+                this.setState({firstNameValidationMsg: ""});
+                return firstNameValidationMsg;
+            } else {
+                this.setState({lastNameValidationMsg: ""});
+                return lastNameValidationMsg;
             }
         }
     }
@@ -70,19 +94,31 @@ class EmailRegister extends Component {
         return re.test(password);
     }
     passwordValidation = (password)=> {
+        let passwordValidationMsg = "";
         if(this.validatePassword(password)) {
             this.setState({passwordValidationMsg: ""});
         } else {
-            this.setState({passwordValidationMsg: "Password too small or invalid character,use(8-25 char)(a-z,0-9,A-Z,!,@,#,$,%,^,&,*,(,),_,.)"});
+            passwordValidationMsg = "Password too small or invalid character,use(8-25 char)(a-z,0-9,A-Z,!,@,#,$,%,^,&,*,(,),_,.)";
+            this.setState({passwordValidationMsg});
         }
+        return passwordValidationMsg;
     }
 
-    confrimPasswordValidation = (confrimPassword)=> {
-        if(confrimPassword !== this.state.password) {
-            this.setState({confirmPasswordValidationMsg: "Password did not match"});
+    confirmPasswordValidation = (confirmPassword)=> {
+        let confirmPasswordValidationMsg = "";
+        console.log("cf" , confirmPassword);
+        if(confirmPassword != "") {
+            if(confirmPassword !== this.state.password) {
+                confirmPasswordValidationMsg = "Password did not match";
+                this.setState({confirmPasswordValidationMsg});
+            } else {
+                this.setState({confirmPasswordValidationMsg: ""});
+            }
         } else {
-            this.setState({confirmPasswordValidationMsg: ""});
+            confirmPasswordValidationMsg = "Confirm Password cannot be empty";
+            this.setState({confirmPasswordValidationMsg});
         }
+        return confirmPasswordValidationMsg;
     }
 
     validateMobile = mobile => {
@@ -90,11 +126,14 @@ class EmailRegister extends Component {
         return re.test(mobile);
     }
     mobileValidation = mobile => {
+        let mobileValidationMsg = "";
         if(this.validateMobile(mobile)) {
             this.setState({mobileValidationMsg: ""});
         } else {
-            this.setState({mobileValidationMsg: "Invalid Mobile Number"})
+            mobileValidationMsg = "Invalid Mobile Number";
+            this.setState({mobileValidationMsg})
         }
+        return mobileValidationMsg;
     }
 
     loginHandle = ()=> {
@@ -104,6 +143,38 @@ class EmailRegister extends Component {
     test = ()=> {
         console.log("in test function");
         console.log(this.state);
+
+            let emailValidationMsg = this.emailValidation(this.state.userEmail);
+            let passwordValidationMsg = this.passwordValidation(this.state.password);
+            let usernameValidationMsg = this.usernameValidation(this.state.username);
+            let firstNameValidationMsg = this.nameValidation(this.state.firstName, 1);
+            let lastNameValidationMsg = this.nameValidation(this.state.lastName, 2);
+            let mobileValidationMsg = this.mobileValidation(this.state.mobile);
+            let confirmPasswordValidationMsg = this.confirmPasswordValidation(this.state.confirmPassword);
+            let termErrorMsg = "";
+
+            if(!this.state.checked) {
+                termErrorMsg = "Please read and agree terms";
+                this.setState({termErrorMsg});
+            }
+
+            console.log(termErrorMsg);
+
+            if(
+                emailValidationMsg =="" &&
+                passwordValidationMsg=="" &&
+                firstNameValidationMsg =="" &&
+                lastNameValidationMsg == "" &&
+                mobileValidationMsg == "" &&
+                usernameValidationMsg == "" &&
+                confirmPasswordValidationMsg == "" &&
+                termErrorMsg == ""
+            ) {
+
+                this.refs.toast.show("Creatin New Account...", 1000, () => {
+                    // something you want to do at close
+                });
+
         axios({
             method: 'post',
             url: 'http://13.238.16.112/signup/registerUser',
@@ -117,7 +188,7 @@ class EmailRegister extends Component {
                 "firstName": this.state.firstName,
                 "lastName": this.state.lastName,
                 "code": this.state.code,
-                "mobile": this.state.mobile,
+                "phone": this.state.mobile,
                 "role": this.state.role
             }
           }).then(data => {
@@ -126,16 +197,21 @@ class EmailRegister extends Component {
               if(data.data.message == "success") {
                   msg = "Account created successfully.";
                   this._storeData(data.data.userData);
+                  this.refs.toast.show(msg, 1000, () => {
+                    // something you want to do at close
+                });
                   this._handleNavigation('MessageScreen');
-              } else {
-                  msg = data.data.message;
+                  
+              } else if(data.data.message == "email already taken") {
+                  this.setState({emailValidationMsg: "Email already taken"});
+              } else if (data.data.message == "username already taken") {
+                  this.setState({usernameValidationMsg: "Username already taken"});
               }
-              this.refs.toast.show(msg, 1000, () => {
-                // something you want to do at close
-            });
+              
           }).catch(err=>{
                 console.log(err);  
           });
+        }
     }
 
     _storeData = async (userData) => {
@@ -156,15 +232,22 @@ class EmailRegister extends Component {
         navigate(navigateTo);
     }
 
+    tickHandle = ()=> {
+        if(!this.state.checked) 
+            this.setState({checked: true, termErrorMsg: ""});
+        else
+            this.setState({checked: false});
+    }
+
     render() {
         return(
             this.state.loading ? <View><Text>Loading...</Text></View> :
             <View style={registerStyle.container}>
             <ScrollView>
-                <Toast ref="toast"  position='top'/>
+                <Toast ref="toast"  position='bottom'/>
                 <View style={registerStyle.formContainer}>
                     <Text style={registerStyle.loginHeading}>Create an account on Watch Your Talk</Text>
-                    <Text style={registerStyle.loginSubHeading}>Some text here to display</Text>
+                    <Text style={registerStyle.loginSubHeading}>This is a general well-being app</Text>
                     <View>
                         <View style={registerStyle.inputWrapper}>
                             <TextInput
@@ -222,7 +305,7 @@ class EmailRegister extends Component {
                             <TextInput
                                 placeholder = "Confirm Password"
                                 style={registerStyle.input}
-                                onChangeText={(confirmPassword) => {this.setState({confirmPassword}); this.confrimPasswordValidation(confirmPassword);}}
+                                onChangeText={(confirmPassword) => {this.setState({confirmPassword}); this.confirmPasswordValidation(confirmPassword);}}
                                 value={this.state.confirmPassword}
                                 underlineColorAndroid='transparent'
                                 secureTextEntry={true}
@@ -247,6 +330,13 @@ class EmailRegister extends Component {
                             />
                         </View>
                         <Text style={[registerStyle.errorMsg, {width: "100%", marginTop: -10, marginBottom: 10}]}>{this.state.mobileValidationMsg}</Text>
+
+                        <CheckBox
+                            title='I agree the Terms and Privacy Policy'
+                            checked={this.state.checked}
+                            onPress = {this.tickHandle}
+                        />
+                        <Text style={[registerStyle.errorMsg, {marginTop: -5, marginLeft: 11, marginBottom: 10}]}>{this.state.termErrorMsg}</Text>
                         <TouchableOpacity
                             style={registerStyle.registerButton}
                             onPress={this.test}
@@ -261,6 +351,13 @@ class EmailRegister extends Component {
                                 onPress={this._handleNavigation.bind(this, 'Login')}
                             >
                                 <Text style={registerStyle.loginLink} onClick>Login Here</Text>
+                            </TouchableHighlight>
+                        </View>
+                        <View style={registerStyle.loginContainer}>
+                            <TouchableHighlight
+                                onPress={this._handleNavigation.bind(this, 'Privacy')}
+                            >
+                                <Text style={registerStyle.loginLink} onClick>Terms and Privacy Policy</Text>
                             </TouchableHighlight>
                         </View>
                     </View>

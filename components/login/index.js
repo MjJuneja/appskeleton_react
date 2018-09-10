@@ -8,12 +8,14 @@ import md5 from 'md5';
 class Login extends Component {
     constructor(props) {
         super(props);
+        this._retrieveData();
 
         this.state = {
             loginid: "",
             loginPassword: "",
             loginErrorMsg: "",
-            loading: false
+            loading: false,
+            splashScreenActive: true
         };
     }
 
@@ -37,23 +39,24 @@ class Login extends Component {
     //     this.setState({loading: false});
     //   }
 
-    // _retrieveData = async () => {
-    //     console.log("in retrieve data");
-    //     try {
-    //       const userData = await AsyncStorage.getItem('userData');
-    //       if (userData !== null) {
-    //         // We have data!!
-    //         userData = JSON.parse(userData);
-    //         console.log(userData);
-    //         // this._handleNavigation("HomeScreen");
-    //       } else {
-    //           console.log("No data found");
-    //       }
-    //      } catch (error) {
-    //        // Error retrieving data
-    //        console.log(error);
-    //      }
-    //   }
+    _retrieveData = async () => {
+        console.log("in retrieve data");
+        try {
+          const userData = await AsyncStorage.getItem('userData');
+          if (userData !== null) {
+            // We have data!!
+            userData = JSON.parse(userData);
+            console.log(userData);
+            this._handleNavigation("MessageScreen");
+          } else {
+              console.log("No data found");
+          }
+          this.setState({splashScreenActive: false});
+         } catch (error) {
+           // Error retrieving data
+           console.log(error);
+         }
+      }
 
     _storeData = async (userData) => {
         try {
@@ -86,7 +89,7 @@ class Login extends Component {
                 if(data.data.message == "success") {
                     console.log("success");
                     this._storeData(data.data.userData);
-                    this._handleNavigation("HomeScreen");
+                    this._handleNavigation("MessageScreen");
                 }
                 this.refs.toast.show(data.data.message, 1000, () => {
                     // something you want to do at close
@@ -99,6 +102,7 @@ class Login extends Component {
 
     render() {
         return(
+            this.state.splashScreenActive ? <SplashScreen /> :
             this.state.loading ? <View><Text>Loading...</Text></View> :
             <View style={loginStyle.container}>
                 <Toast ref="toast"  position='top'/>
@@ -121,6 +125,7 @@ class Login extends Component {
                             value={this.state.loginid}
                             keyboardType = "email-address"
                             underlineColorAndroid='transparent'
+                            placeholderTextColor="#b1b1b1" 
                         />
                         <TextInput
                             placeholder = "Password"
@@ -129,6 +134,7 @@ class Login extends Component {
                             value={this.state.loginPassword}
                             secureTextEntry={true}
                             underlineColorAndroid='transparent'
+                            placeholderTextColor="#b1b1b1" 
                         />
                         <Text>{this.state.loginErrorMsg}</Text>
                         <TouchableOpacity

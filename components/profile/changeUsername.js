@@ -14,7 +14,8 @@ class ChangeUsername extends Component {
         this.state = {
             userData: {},
             username: "",
-            usernameValidationMsg: ""
+            usernameValidationMsg: "",
+            splashScreenActive: true
         };
     }
 
@@ -26,6 +27,7 @@ class ChangeUsername extends Component {
             // We have data!!
             userData = JSON.parse(userData);
             console.log(userData);
+            this.checkToken(userData.sessionId);
             this.setState({
                 userData,
                 username: userData.username
@@ -38,6 +40,48 @@ class ChangeUsername extends Component {
            console.log(error);
          }
       }
+
+      checkToken = token => {
+      axios({
+          method: 'post',
+          url: 'http://13.238.16.112/answer/getAnswer',
+          headers : {
+              'Content-Type' : 'application/json',
+              'Authorization' : 'token '+token
+          },
+          data: {
+            "fromDate":"2018-08-19T00:00:00.000Z",
+            "toDate":"2018-08-20T00:00:00.000Z"
+          }
+        }).then(data => {
+            console.log(data.data);
+            if(data.data.message=="Access denied") {
+              this._removeData();
+              this._handleNavigation('Home');
+            } else {
+                console.log("access granted");
+                this.setState({splashScreenActive: false});
+            }
+        }).catch(err=>{
+              console.log(err);
+        });
+    }
+    
+    _removeData = async()=> {
+      console.log("removing data");
+      try {
+        const userData = await AsyncStorage.removeItem('userData');
+       } catch (error) {
+         // Error retrieving data
+         console.log(error);
+       }
+    }
+
+    _handleNavigation = (navigateTo)=> {
+        console.log(navigateTo);
+        const { navigate } = this.props.navigation;
+        navigate(navigateTo);
+    }
 
     validateUsername = username => {
         var re = /^([a-zA-Z0-9_.]{5,20})$/;
@@ -74,6 +118,7 @@ class ChangeUsername extends Component {
 
     render() {
         return(
+            this.state.splashScreenActive ? <SplashScreen/> :
             <View style={loginStyle.container}>
                 <Toast ref="toast"  position='top'/>
                 <View style={loginStyle.formContainer}>
@@ -87,6 +132,7 @@ class ChangeUsername extends Component {
                                 style={loginStyle.input}
                                 onChangeText={(username) => {this.setState({username}); this.usernameValidation(username)}}
                                 value={this.state.username}
+                                underlineColorAndroid='transparent'
                             />
                             <Text>{this.state.usernameValidationMsg}</Text>
                         </View>

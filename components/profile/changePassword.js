@@ -15,10 +15,13 @@ class ChangePassword extends Component {
             userData: {},
             email: "",
             password: "",
+            confirmPassword: "",
             newPassword: "",
             confirmNewPassowrd: "",
+            currentPasswordValidationMsg : "",
             passwordValidationMsg: "",
-            confirmPasswordValidationMsg : ""
+            confirmPasswordValidationMsg : "",
+            splashScreenActive: true
         };
     }
 
@@ -30,6 +33,7 @@ class ChangePassword extends Component {
             // We have data!!
             userData = JSON.parse(userData);
             console.log(userData);
+            this.checkToken(userData.sessionId);
             this.setState({
                 userData
             });
@@ -42,27 +46,99 @@ class ChangePassword extends Component {
          }
       }
 
+      checkToken = token => {
+      axios({
+          method: 'post',
+          url: 'http://13.238.16.112/answer/getAnswer',
+          headers : {
+              'Content-Type' : 'application/json',
+              'Authorization' : 'token '+token
+          },
+          data: {
+            "fromDate":"2018-08-19T00:00:00.000Z",
+            "toDate":"2018-08-20T00:00:00.000Z"
+          }
+        }).then(data => {
+            console.log(data.data);
+            if(data.data.message=="Access denied") {
+              this._removeData();
+              this._handleNavigation('Home');
+            } else {
+                console.log("access granted");
+                this.setState({splashScreenActive: false});
+            }
+        }).catch(err=>{
+              console.log(err);
+        });
+    }
+    
+    _removeData = async()=> {
+      console.log("removing data");
+      try {
+        const userData = await AsyncStorage.removeItem('userData');
+       } catch (error) {
+         // Error retrieving data
+         console.log(error);
+       }
+    }
+
+    _handleNavigation = (navigateTo)=> {
+        console.log(navigateTo);
+        const { navigate } = this.props.navigation;
+        navigate(navigateTo);
+    }
+
+    currentPasswordValidation = (currentPassword)=> {
+        let currentPasswordValidationMsg = "";
+        if(currentPassword == "") {
+            currentPasswordValidationMsg = "Current Password cannot be empty";
+        }
+        this.setState({currentPasswordValidationMsg})
+        return currentPasswordValidationMsg;
+    }
+
     validatePassword = password => {
         var re = /^[a-z0-9A-Z!@#$%^&*()_.]{8,25}$/;
         return re.test(password);
     }
     passwordValidation = (password)=> {
+        let passwordValidationMsg = "";
         if(this.validatePassword(password)) {
             this.setState({passwordValidationMsg: ""});
         } else {
-            this.setState({passwordValidationMsg: "Password too small or invalid character,use(8-25 char)(a-z,0-9,A-Z,!,@,#,$,%,^,&,*,(,),_,.)"});
+            passwordValidationMsg = "Password too small or invalid character,use(8-25 char)(a-z,0-9,A-Z,!,@,#,$,%,^,&,*,(,),_,.)";
+            this.setState({passwordValidationMsg});
         }
+        return passwordValidationMsg;
     }
 
-    confrimPasswordValidation = (confrimPassword)=> {
-        if(confrimPassword !== this.state.newPassword) {
-            this.setState({confirmPasswordValidationMsg: "Password did not match"});
+    confirmPasswordValidation = (confirmPassword)=> {
+        let confirmPasswordValidationMsg;
+        if(confirmPassword != "") {
+            if(confirmPassword !== this.state.newPassword) {
+                confirmPasswordValidationMsg = "Password did not match";
+                this.setState({confirmPasswordValidationMsg});
+            } else {
+                this.setState({confirmPasswordValidationMsg: ""});
+            }
         } else {
-            this.setState({confirmPasswordValidationMsg: ""});
+            confirmPasswordValidationMsg = "Confirm password cannot be empty";
+            this.setState({confirmPasswordValidationMsg});
         }
+        return confirmPasswordValidationMsg;
     }
 
     loginHandle = ()=> {
+
+        let passwordValidationMsg = this.passwordValidation(this.state.newPassword);
+        let confirmPasswordValidationMsg = this.confirmPasswordValidation(this.state.confirmNewPassowrd);
+        let currentPasswordValidationMsg = this.currentPasswordValidation(this.state.password);
+
+        if(
+            passwordValidationMsg == "" &&
+            confirmPasswordValidationMsg == "" &&
+            currentPasswordValidationMsg == ""
+        ) {
         axios({
             method: 'post',
             url: 'http://13.238.16.112/profile/setNewPassword',
@@ -82,10 +158,12 @@ class ChangePassword extends Component {
           }).catch(err=>{
                 console.log(err);  
           });
+        }
     }
 
     render() {
         return(
+            this.state.splashScreenActive ? <SplashScreen /> :
             <View style={loginStyle.container}>
                 <Toast ref="toast"  position='top'/>
                 <View style={loginStyle.formContainer}>
@@ -95,10 +173,11 @@ class ChangePassword extends Component {
                             <TextInput
                                 placeholder = "Current Password"
                                 style={loginStyle.input}
-                                onChangeText={(password) => {this.setState({password});}}
+                                onChangeText={(password) => {this.setState({password}); this.currentPasswordValidation(password);}}
                                 value={this.state.password}
                                 secureTextEntry ={true}
                             />
+                            <Text style={loginStyle.errorMsg}>{this.state.currentPasswordValidationMsg}</Text>
                         </View>
 
                         <View style={{marginBottom: 10}}>
@@ -117,7 +196,7 @@ class ChangePassword extends Component {
                             <TextInput
                                 placeholder = "Confirm New Password"
                                 style={loginStyle.input}
-                                onChangeText={(confirmNewPassowrd) => {this.setState({confirmNewPassowrd}); this.confrimPasswordValidation(confirmNewPassowrd)}}
+                                onChangeText={(confirmNewPassowrd) => {this.setState({confirmNewPassowrd}); this.confirmPasswordValidation(confirmNewPassowrd)}}
                                 value={this.state.confirmNewPassowrd}
                                 secureTextEntry ={true}
                             />

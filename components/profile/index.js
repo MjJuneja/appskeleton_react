@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {StyleSheet, View, Text, Image, TextInput, TouchableOpacity, TouchableHighlight, Linking, ScrollView, AsyncStorage} from 'react-native';
 import axios from 'axios';
 import md5 from 'md5';
+import SplashScreen from "../splashscreen";
 import Toast, {DURATION} from 'react-native-easy-toast';
 
 class Profile extends Component {
@@ -23,7 +24,7 @@ class Profile extends Component {
             "userEmail":"nikhil@gmail.com",
             "username":"nikhil",
             "password":"",
-            "code":"+91",
+            "code":"+61",
             "mobile":"",
             "role":"customer",
             "emailValidationMsg" : "",
@@ -40,7 +41,8 @@ class Profile extends Component {
             "cityValidationMsg" : "",
             "stateValidationMsg" : "",
             "countryValidationMsg" : "",
-            loading: false
+            loading: false,
+            splashScreenActive: true
         };
     }
 
@@ -66,6 +68,7 @@ class Profile extends Component {
             // We have data!!
             userData = JSON.parse(userData);
             console.log(userData);
+            this.checkToken(userData.sessionId);
             this.setState({
                 userData,
                 firstName: userData.userInfo.firstName,
@@ -75,15 +78,53 @@ class Profile extends Component {
                 state: userData.userInfo.state,
                 pincode: userData.userInfo.pincode,
                 country: userData.userInfo.country,
+                username: userData.username,
+                userEmail: userData.userEmail
             });
           } else {
               console.log("No data found");
           }
+          this.setState({splashScreenActive: false});
          } catch (error) {
            // Error retrieving data
            console.log(error);
          }
       }
+
+      checkToken = token => {
+      axios({
+          method: 'post',
+          url: 'http://13.238.16.112/answer/getAnswer',
+          headers : {
+              'Content-Type' : 'application/json',
+              'Authorization' : 'token '+token
+          },
+          data: {
+            "fromDate":"2018-08-19T00:00:00.000Z",
+            "toDate":"2018-08-20T00:00:00.000Z"
+          }
+        }).then(data => {
+            console.log(data.data);
+            if(data.data.message=="Access denied") {
+              this._removeData();
+              this._handleNavigation('Home');
+            } else {
+                console.log("access granted");
+            }
+        }).catch(err=>{
+              console.log(err);
+        });
+    }
+    
+    _removeData = async()=> {
+      console.log("removing data");
+      try {
+        const userData = await AsyncStorage.removeItem('userData');
+       } catch (error) {
+         // Error retrieving data
+         console.log(error);
+       }
+    }
 
       _storeData = async (userData) => {
         try {
@@ -239,12 +280,17 @@ class Profile extends Component {
 
     render() {
         return(
-            this.state.loading ? <Text>Loading...</Text> :
+            this.state.splashScreenActive ? <SplashScreen />:
             <View style={registerStyle.container}>
                 <Toast ref="toast"  position='top'/>
                 <ScrollView>
                     <View style={registerStyle.formUsernameContainer}>
-                        <Text style={{height: 100, width: 100, borderRadius: 5, backgroundColor: "#f1f1f1", marginBottom: 10, alignSelf:"center"}}></Text>
+                        <View style={{height: 100, width: 100, borderRadius: 5, backgroundColor: "#f1f1f1", marginBottom: 10, alignSelf:"center"}}>
+                            <Image
+                                style={registerStyle.logo}
+                                source={require ('../../assets/images/logo/logo.png')}
+                            />
+                        </View>
                         <Text style={{fontSize: 16, alignSelf:"center", color: "#333"}}>Username: {this.state.username}</Text>
                         <TouchableHighlight onPress={this._handleNavigation.bind(this, "ChangeUsername")}>
                             <Text style={{fontSize: 14, color: "#888", marginBottom: 10, alignSelf:"center"}}>Change Username</Text>
@@ -412,14 +458,14 @@ class Profile extends Component {
                                 </TouchableOpacity>
                             : 
                             <View style={{display: "flex", flexDirection: "row"}}>  
-                                <View style={{flex: 1, marginRight: 2}}> 
+                                {/* <View style={{flex: 1, marginRight: 2}}> 
                                     <TouchableOpacity
                                         style={registerStyle.loginButton}
                                         onPress={this.test}
                                     >
                                         <Text style={registerStyle.loginButtonText}> Edit Mobile </Text>
                                     </TouchableOpacity>
-                                </View>
+                                </View> */}
                                 <View style={{flex: 1, marginLeft: 2}}>
                                     <TouchableOpacity
                                         style={registerStyle.loginButton}
@@ -443,6 +489,10 @@ const registerStyle = StyleSheet.create({
         flex: 1,
         backgroundColor: "#f4f5f8",
         justifyContent: "center"
+    },
+    logo : {
+        height: 100,
+        width: 100
     },
     profileImageWrapper : {
         // height: 240,
