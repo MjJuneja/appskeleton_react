@@ -102,12 +102,30 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/exploded-aar/appskeleton/react-native-svg/unspecified/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d049811d649a377f40993bc76a878a9b4f7d909a">
+        <dex dex="/Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/pre-dexed/debug/appskeleton-react-native-svg-unspecified_7b3bb194f92e1d74bbcae92a1aa7352fe9a9ef41.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/mukuljuneja/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.1"
         sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
         <dex dex="/Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/pre-dexed/release/support-annotations-23.0.1_dd7f7bdd22e98b3ab51dffd1e51a8fa0cec4b169.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/exploded-aar/appskeleton/react-native-volume-controller/unspecified/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="921dc7324c7fe524edbf3089b97679b8ac9dbf86">
+        <dex dex="/Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/pre-dexed/debug/appskeleton-react-native-volume-controller-unspecified_9894249c5f3bbe72588cb3dfb51df67657ff0cc5.jar" />
     </item>
     <item
         is-multidex="false"

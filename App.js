@@ -19,7 +19,7 @@ export default class App extends React.Component {
 
   render() {
     if(this.state.fontLoaded == true) {
-        return <Navigate />
+        return <Navigate ch="das"/>
     } else {
       return <SplashScreen />;
     }

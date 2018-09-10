@@ -66,6 +66,8 @@ ADDED from /Users/mukuljuneja/Desktop/trial/appskeleton/android/app/src/main/And
 		ADDED from /Users/mukuljuneja/Desktop/trial/appskeleton/android/app/src/main/AndroidManifest.xml:23:17-81
 uses-sdk
 INJECTED from /Users/mukuljuneja/Desktop/trial/appskeleton/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [appskeleton:react-native-svg:unspecified] /Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/exploded-aar/appskeleton/react-native-svg/unspecified/AndroidManifest.xml:5:5-7:41
+MERGED from [appskeleton:react-native-volume-controller:unspecified] /Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/exploded-aar/appskeleton/react-native-volume-controller/unspecified/AndroidManifest.xml:7:5-9:41
 MERGED from [appskeleton:react-native-youtube:unspecified] /Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/exploded-aar/appskeleton/react-native-youtube/unspecified/AndroidManifest.xml:7:5-9:41
 MERGED from [appskeleton:react-native-vector-icons:unspecified] /Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/exploded-aar/appskeleton/react-native-vector-icons/unspecified/AndroidManifest.xml:7:5-9:41
 MERGED from [appskeleton:react-native-voice:unspecified] /Users/mukuljuneja/Desktop/trial/appskeleton/android/app/build/intermediates/exploded-aar/appskeleton/react-native-voice/unspecified/AndroidManifest.xml:8:5-11:54
