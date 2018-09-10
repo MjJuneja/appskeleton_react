@@ -3,13 +3,9 @@ import axios from 'axios';
 import moment from 'moment';
 import SplashScreen from "../splashscreen";
 import {Button, View, AsyncStorage, Text, ScrollView, TouchableOpacity, ProgressBarAndroid, Dimensions} from "react-native";
-import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph
-  } from 'react-native-chart-kit'
+
+import { BarChart,LineChart, Grid, YAxis, XAxis } from 'react-native-svg-charts';
+import * as shape from 'd3-shape';
  
 export default class PositiveChart extends React.PureComponent {
 
@@ -422,8 +418,25 @@ export default class PositiveChart extends React.PureComponent {
     }
  
     render() {
- 
+        // const CUT_OFF = 20
+        // const data = this.state.dataNow.datasets[0].data;
+        // const Labels = ({ x, y, bandwidth,data }) => (
+        //     data.map((value, index) => (
+        //         <Text
+        //             key={ index }
+        //             x={ x(index) + (bandwidth / 2) }
+        //             y={ value < CUT_OFF ? y(value) - 10 : y(value) + 15 }
+        //             fontSize={ 14 }
+        //             fill={ value >= CUT_OFF ? 'white' : 'black' }
+        //             alignmentBaseline={ 'middle' }
+        //             textAnchor={ 'middle' }
+        //         >
+        //             {value}
+        //         </Text>
+        //     ))
+        // )
         
+        // const fill = 'rgb(134, 65, 244)';
 
         return (
             this.state.splashScreenActive ? <SplashScreen /> : <ScrollView>
@@ -477,22 +490,64 @@ export default class PositiveChart extends React.PureComponent {
             <ProgressBarAndroid styleAttr="Horizontal" color="#FF7417" />
             : <View></View>}
             </View>
+                {this.state.valueType==0 ? 
+<View style={{ height: 400, flexDirection: 'row', padding: 10, width: this.state.deviceWidth }}>
+                <YAxis
+                data={ [0,...this.state.dataNow.datasets[0].data] }
+                contentInset={{ left: 7, top: 5, bottom: 5 }}
+                svg={{
+                    fill: 'black',
+                    fontSize: 10,
+                }}
+                style={{marginLeft:0, width: 18}}
+                numberOfTicks={ 10 }
+                formatLabel={ value => `${value}%` }
+        />
+        <BarChart
+            style={{ flex: 1, marginLeft: 16 }}
+            data={ [...this.state.dataNow.datasets[0].data,0,0,0,0,0,0] }
+            svg={{ fill: '#FF7417' }}
+            >
+             <Grid direction={Grid.Direction.HORIZONTAL}/>
+                {/* <Labels/> */}
+        </BarChart>
+            </View>
+                :
+                <View style={{ height: 400, flexDirection: 'row', padding: 10, width: this.state.deviceWidth }}>
+                <YAxis
+                    data={ this.state.dataNow.datasets[0].data }
+                    style={{marginLeft:0, width: 18}}
+                    contentInset={{ left: 17, top: 5, bottom: 5 }}
+                    svg={{
+                        fill: 'black',
+                        fontSize: 10,
+                    }}
+                    numberOfTicks={ 10 }
+                    formatLabel={ value => `${value}%` }
 
+                    />
             <BarChart
-                // style={graphStyle}
-                data={this.state.dataNow}
-                width={this.state.deviceWidth-1}
-                height={400}
-                chartConfig={{
-                    backgroundColor: '#fff',
-                    backgroundGradientFrom: '#fff',
-                    backgroundGradientTo: '#fff',
-                    color: () => "#FF7417",
-                    style: {
-                      borderRadius: 16
-                    }
-                  }}
-            />
+            style={{ flex: 1, marginLeft: 16 }}
+            data={ this.state.dataNow.datasets[0].data }
+            svg={{ fill: '#FF7417' }}
+            >
+             <Grid direction={Grid.Direction.HORIZONTAL}/>
+                {/* <Labels/> */}
+        </BarChart>
+        </View>
+                }
+            
+            <View style={{marginHorizontal: 10, marginVertical: 5}}>
+                <XAxis
+                        data={ this.state.dataNow.labels }
+                        scale={shape.scaleBand}
+                        formatLabel={ (value, index) => this.state.dataNow.labels[index]}
+                        style={{ marginBottom: 20}}
+                        contentInset={{ top: 15, bottom: 10, left: 50, right: 20 }}
+                        labelStyle={ { color: 'black' } }
+                    />
+                </View>
+
             {this.state.valueType==2 ?
                 <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphYear}</Text> : <Text></Text>
             }

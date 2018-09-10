@@ -38,6 +38,7 @@ export default class App extends React.Component {
       });
       // console.log("content", content);
       this.setState({content});
+      this.storeContentInAsync(content);
 
       ReactNativeVolumeController.change(0);
       this.onSpeechStart();
@@ -100,15 +101,21 @@ export default class App extends React.Component {
         this.submitVoice(this.state.content);
       }
       this.setState({content: ""});
+      AsyncStorage.removeItem("content");
     }, 60000);
 
-    setInterval(()=>{
-      console.log("state content", this.state.content);
-      if(this.state.content!=="") {
-        this.submitVoice(this.state.content);
-      }
-      this.setState({content: ""});
-    }, 15000);
+    // setInterval(()=>{
+    //   console.log("state content", this.state.content);
+    //   if(this.state.content!=="") {
+    //     this.submitVoice(this.state.content);
+    //   }
+    //   this.setState({content: ""});
+    // }, 15000);
+  }
+
+  storeContentInAsync = async (content)=> {
+    await AsyncStorage.setItem("content", content);
+    console.log("item store in async");
   }
 
   submitVoice = content => {
@@ -151,12 +158,15 @@ export default class App extends React.Component {
     console.log("in retrieve data");
     try {
       const userData = await AsyncStorage.getItem('userData');
-    //   const micFlag = await AsyncStorage.getItem('micFlag');
+      const content = await AsyncStorage.getItem('content');
       if (userData !== null) {
         // We have data!!
         userData = JSON.parse(userData);
         console.log(userData);
         this.setState({userData});
+        if(contentHit!==null && contentHit != "") {
+          this.submitVoice(content);
+        }
       } else {
           console.log("No data found");
       }

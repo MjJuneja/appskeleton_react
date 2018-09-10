@@ -5,6 +5,9 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import axios from 'axios';
 import Carousel from 'react-native-snap-carousel';
 
+import { BarChart, Grid } from 'react-native-svg-charts';
+import * as shape from 'd3-shape';
+
 import BottomNavigation,{FullTab} from 'react-native-material-bottom-navigation';
 import { Icon } from 'react-native-elements'
 

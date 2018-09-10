@@ -3,10 +3,11 @@ import axios from 'axios';
 import moment from 'moment';
 import {Button, View, AsyncStorage, Text, ScrollView, TouchableOpacity, ProgressBarAndroid, Dimensions} from "react-native";
 
-
+import { BarChart,LineChart, Grid, YAxis, XAxis } from 'react-native-svg-charts';
+import * as shape from 'd3-shape';
 
 import SplashScreen from "../splashscreen";
-
+ 
 export default class NegativeChart extends React.PureComponent {
 
     constructor(props) {
@@ -410,12 +411,11 @@ export default class NegativeChart extends React.PureComponent {
  
     render() {
 
-        const fill = 'rgb(134, 65, 244)';
+        const fill = 'rgb(134, 65, 244)'
         const data   = [ 50, 10, 40, 95, -4, -24, null, 85, undefined, 0, 35, 53, -53, 24, 50, -20, -80 ];
 
         return (
             this.state.splashScreenActive ? <SplashScreen /> : <ScrollView>
-            
 
             <View style={{display: "flex", flexDirection: "row", justifyContent: "center", margin: 20, marginBottom: 10}}>
             <TouchableOpacity
@@ -458,7 +458,64 @@ export default class NegativeChart extends React.PureComponent {
             <ProgressBarAndroid styleAttr="Horizontal" color="#FF7417" />
             : <View></View>}
             </View>
+
+            {this.state.valueType==0 ? 
+<View style={{ height: 400, flexDirection: 'row', padding: 10, width: this.state.deviceWidth }}>
+                <YAxis
+                data={ [0,...this.state.dataNow.datasets[0].data] }
+                contentInset={{ left: 7, top: 5, bottom: 5 }}
+                svg={{
+                    fill: 'black',
+                    fontSize: 10,
+                }}
+                style={{marginLeft:0, width: 18}}
+                numberOfTicks={ 10 }
+                formatLabel={ value => `${value}%` }
+        />
+        <BarChart
+            style={{ flex: 1, marginLeft: 16 }}
+            data={ [...this.state.dataNow.datasets[0].data,0,0,0,0,0,0] }
+            svg={{ fill: '#FF7417' }}
+            >
+             <Grid direction={Grid.Direction.HORIZONTAL}/>
+                {/* <Labels/> */}
+        </BarChart>
+            </View>
+                :
+                <View style={{ height: 400, flexDirection: 'row', padding: 10, width: this.state.deviceWidth }}>
+                <YAxis
+                    data={ this.state.dataNow.datasets[0].data }
+                    style={{marginLeft:0, width: 18}}
+                    contentInset={{ left: 17, top: 5, bottom: 5 }}
+                    svg={{
+                        fill: 'black',
+                        fontSize: 10,
+                    }}
+                    numberOfTicks={ 10 }
+                    formatLabel={ value => `${value}%` }
+
+                    />
+            <BarChart
+            style={{ flex: 1, marginLeft: 16 }}
+            data={ this.state.dataNow.datasets[0].data }
+            svg={{ fill: '#FF7417' }}
+            >
+             <Grid direction={Grid.Direction.HORIZONTAL}/>
+                {/* <Labels/> */}
+        </BarChart>
+        </View>
+                }
             
+            <View style={{marginHorizontal: 10, marginVertical: 5}}>
+                <XAxis
+                        data={ this.state.dataNow.labels }
+                        scale={shape.scaleBand}
+                        formatLabel={ (value, index) => this.state.dataNow.labels[index]}
+                        style={{ marginBottom: 20}}
+                        contentInset={{ top: 15, bottom: 10, left: 50, right: 20 }}
+                        labelStyle={ { color: 'black' } }
+                    />
+                </View>
 
             {this.state.valueType==2 ?
                 <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphYear}</Text> : <Text></Text>
@@ -467,15 +524,6 @@ export default class NegativeChart extends React.PureComponent {
             <View style={{marginBottom:40, marginTop: 15}}>
                   <Text style={{textAlign: "center", fontSize: 17, fontFamily: "Roboto-Bold"}}>Negative Words</Text>
             </View>
-
-            <Button
-                title="Previous"
-                onPress={this._previousHandle}
-            />
-            <Button
-                title="Next"
-                onPress={this._nextHandle}
-            />
 
             </ScrollView>
         )

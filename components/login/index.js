@@ -71,7 +71,7 @@ class Login extends Component {
       }
 
     loginHandle = ()=> {
-        this.refs.toast.show("Login button pressed", 500, () => {
+        this.refs.toast.show("Verifying...", 500, () => {
             // something you want to do at close
         });
         axios({
@@ -105,7 +105,7 @@ class Login extends Component {
             this.state.splashScreenActive ? <SplashScreen /> :
             this.state.loading ? <View><Text>Loading...</Text></View> :
             <View style={loginStyle.container}>
-                <Toast ref="toast"  position='top'/>
+                <Toast ref="toast"  position='bottom'/>
                 <Image
                     style={loginStyle.backgroundImage}
                     source={require ('../../assets/images/gradients/background1.jpg')}

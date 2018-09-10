@@ -9,10 +9,6 @@ import { Icon } from 'react-native-elements'
 import Voice from 'react-native-voice';
 import moment from 'moment';
 
-import { BarChart, Grid } from 'react-native-svg-charts'
-import * as shape from 'd3-shape';
-
-
 import AlertBox from '../alert';
 
 const fill = 'rgb(134, 65, 244)'
@@ -425,14 +421,7 @@ class Home extends Component {
                     onTabPress={activeTab => this._handleNavigation(activeTab.navigate)}
                 /> 
                 <Toast ref="toast"  position='top'/>
-                <BarChart
-                style={{ height: 200 }}
-                data={ data }
-                svg={{ fill }}
-                contentInset={{ top: 30, bottom: 30 }}
-            >
-                <Grid/>
-            </BarChart>
+               
                 <TouchableOpacity
                     onPress={this._handleNavigation.bind(this, "EmotionScreen")}
                     style={kTenTestStyles.emotionButton}
