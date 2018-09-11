@@ -146,6 +146,7 @@ export default class HomeQuestionChart extends React.PureComponent {
                 console.log("current date", dateTemp);
                 dateTemp = moment(dateTemp).add(1, "days").toDate();
               }
+              console.log(labels);
               let tempGraphDataPercentage = [];
               console.log("graph data",tempGraphData);
 
@@ -170,7 +171,7 @@ export default class HomeQuestionChart extends React.PureComponent {
             temp.map((value)=>{
                 console.log(value.type);
                 if(value.type=="home") {
-                    let tempDate = new Date(value.answeredOn);
+                    let tempDate = moment(value.answeredOn).subtract(5, "hours").subtract(30, "minutes").toDate();
                     tempD = tempDate.getDate();
                     tempM = tempDate.getMonth()+1;
                     tempDM = tempD+"/"+tempM;
@@ -514,7 +515,7 @@ export default class HomeQuestionChart extends React.PureComponent {
                         fontSize: 10,
                     }}
                     numberOfTicks={ 10 }
-                    formatLabel={ value => `${value}%` }
+                    formatLabel={ value => `${value}` }
 
                     />
             <BarChart

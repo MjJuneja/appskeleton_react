@@ -136,6 +136,7 @@ export default class PositiveChart extends React.PureComponent {
             //   console.log("start date", dateTemp);
             //   console.log("end date", endDateMoment);
               for(;moment(dateTemp).isBefore(endDateMoment);) {
+                //   console.log("inside ...");
                 tempGraphData.positive.push(0);
                 tempGraphData.negative.push(0);
                 tempGraphData.neutral.push(0);
@@ -152,27 +153,29 @@ export default class PositiveChart extends React.PureComponent {
                 tempGraphDataPercentage.push(0);
             } else {
 
-                // console.log("********** length 0 nhi h");
               this.setState({graphData:tempGraphData});
               let temp = data.data.data;
-            //   this.refs.toast.show(data.data.message, 1000, () => {
-            //     // something you want to do at close
-            // });
 
 
 
             temp.map((value)=>{
-                let tempDate = new Date(value.createdOn);
+                let tempDate = moment(value.createdOn).subtract(5, "hours").subtract(30, "minutes").toDate();
                 tempD = tempDate.getDate();
                 tempM = tempDate.getMonth()+1;
                 tempDM = tempD+"/"+tempM;
                 tempIndex = labels.indexOf(tempDM);
+                console.log("created on", value.createdOn);
+                console.log("tempDM", tempDM);
+                console.log(tempIndex);
+                console.log("*#############*");
 
                 tempGraphData.positive[tempIndex]+=value.positive;
                 tempGraphData.negative[tempIndex]+=value.negative;
                 tempGraphData.neutral[tempIndex]+=value.neutral;
 
             });
+            
+            // console.log("tesst date", moment("2018-09-10T19:10:25.542Z").subtract(5, "hours").subtract(30, "minutes").toDate());
 
             if(labels.length==0) {
                 labels.push(moment(startDate).toDate().getDate()+"/"+(moment(startDate).toDate().getMonth()+1));
@@ -182,13 +185,15 @@ export default class PositiveChart extends React.PureComponent {
 
                 tempGraphData.positive.map((value,index)=> {
                     // console.log("value is", value);
-                    console.log(tempGraphData.positive[index]);
-                    console.log(tempGraphData.negative[index]);
-                    console.log(tempGraphData.neutral[index]);
-                    console.log("*#############*");
+                    // console.log(tempGraphData.positive[index]);
+                    // console.log(tempGraphData.negative[index]);
+                    // console.log(tempGraphData.neutral[index]);
+                    // console.log("*#############*");
+                //   console.log("inside ... percentage wala");
                     percentage = (parseInt(( (value*100) / (tempGraphData.positive[index]+tempGraphData.negative[index]+tempGraphData.neutral[index]) ).toFixed(0)  )) | 0;
                     tempGraphDataPercentage.push(percentage);
                 });
+
 
             console.log("===========", tempGraphDataPercentage);
             }
@@ -201,7 +206,7 @@ export default class PositiveChart extends React.PureComponent {
             }
             this.setState({graphData: tempGraphDataPercentage, dataNow : dataNow});
             this.setState({progressBarActive: false});
-            // console.log("final data", tempGraphDataPercentage);
+            console.log("final data", dataNow);
           }).catch(err=>{
                 console.log(err);  
           });

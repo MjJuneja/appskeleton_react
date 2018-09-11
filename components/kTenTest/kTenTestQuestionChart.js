@@ -169,7 +169,7 @@ export default class KTenTestQuestionChart extends React.PureComponent {
             temp.map((value)=>{
                 console.log(value.type);
                 if(value.type=="question") {
-                    let tempDate = new Date(value.answeredOn);
+                    let tempDate = moment(value.answeredOn).subtract(5, "hours").subtract(30, "minutes").toDate();
                     tempD = tempDate.getDate();
                     tempM = tempDate.getMonth()+1;
                     tempDM = tempD+"/"+tempM;
@@ -485,7 +485,7 @@ export default class KTenTestQuestionChart extends React.PureComponent {
                 }}
                 style={{marginLeft:0, width: 18}}
                 numberOfTicks={ 10 }
-                formatLabel={ value => `${value}%` }
+                formatLabel={ value => `${value}` }
         />
         <BarChart
             style={{ flex: 1, marginLeft: 16 }}

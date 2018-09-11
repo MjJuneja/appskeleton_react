@@ -157,7 +157,7 @@ export default class SentimentChart extends React.PureComponent {
 
 
             temp.map((value)=>{
-                let tempDate = new Date(value.createdOn);
+                let tempDate = moment(value.createdOn).subtract(5, "hours").subtract(30, "minutes").toDate();
                 tempD = tempDate.getDate();
                 tempM = tempDate.getMonth()+1;
                 tempDM = tempD+"/"+tempM;

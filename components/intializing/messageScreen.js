@@ -99,10 +99,10 @@ class MessageScreen extends Component {
     render() {
         return(
             <View style={messageScreenStyles.container}>
-<Image
+{/* <Image
                     style={messageScreenStyles.backgroundImage}
                     source={require ('../../assets/images/gradients/redToOrange.jpg')}
-                />
+                /> */}
             <ScrollView>
             
                 <Image
@@ -133,7 +133,7 @@ class MessageScreen extends Component {
                         </TouchableOpacity>
                     </View>
                     <View>
-                        <Text style={{fontSize: 15, "color": "#e1e1e1", fontFamily:"Roboto-Bold"}}>{this.state.duplicateError}</Text>
+                        <Text style={{fontSize: 15, "color": "red", marginTop: 5, marginLeft: 15, fontFamily:"Roboto-Bold"}}>{this.state.duplicateError}</Text>
                     </View>
                 </View>
 
@@ -158,7 +158,7 @@ class MessageScreen extends Component {
                             onPress={this.handleNavigation.bind(this, "HomeScreen")}
                             style={{marginTop: 20, marginBottom: 20}}
                         >
-                    <Text style={{color: "#fff", fontSize: 20, width:"70%", padding:10, alignSelf: "center", textAlign:"center", backgroundColor:"rgba(0,0,0,0.2)", borderRadius: 3}}>Continue</Text>
+                    <Text style={{color: "#fff", fontSize: 16, fontFamily:"Roboto-Bold", width:"50%", padding:10, alignSelf: "center", textAlign:"center", backgroundColor:"#FF7417", borderRadius: 3}}>CONTINUE</Text>
                 </TouchableOpacity>
 
             </ScrollView>
@@ -187,7 +187,7 @@ const messageScreenStyles = StyleSheet.create({
         height: 120,
         width: 100,
         alignSelf: "center",
-        marginTop: 15,
+        marginTop: 35,
         marginBottom: 10
     },
     topContainer : {
@@ -196,21 +196,29 @@ const messageScreenStyles = StyleSheet.create({
     },
     personalizedMessage : {
         // backgroundColor: "#e3bb88",
+        position: "relative",
+        marginTop: 15,
         padding: 20,
         borderRadius: 2,
-        fontSize: 17,
-        color: "#fff",
-        fontFamily: "Raleway-Bold",
-        justifyContent: "center"
+        lineHeight: 25,
+        fontSize: 16 ,
+        color: "#333",
+        fontFamily: "OpenSans-SemiBold",
+        justifyContent: "center",
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
     },
     generalMessage : {
         // backgroundColor: "#db9864",
         // 644749
         padding: 20,
         borderRadius: 2,
-        fontSize: 17,
-        color: "#fff",
-        fontFamily: "Raleway-Bold",
+        lineHeight: 25,
+        fontSize: 16,
+        color: "#333",
+        fontFamily: "OpenSans-SemiBold",
         justifyContent: "center"
     },
     greatfulContainer : {
@@ -221,7 +229,7 @@ const messageScreenStyles = StyleSheet.create({
     greatfulHeading : {
         fontSize: 16,
         fontFamily : "Roboto-Medium",
-        color : "#fff",
+        color : "#FF7417",
         textAlign: "center"
     },
     inputContainer : {
@@ -230,19 +238,23 @@ const messageScreenStyles = StyleSheet.create({
         marginTop: 20
     },
     greatfulInput : {
-        borderBottomWidth: 1,
-        borderColor: "#e1e1e1",
-        flex: 5,
-        width: "80%",
-        color: "#fff"
+        borderWidth: 1,
+        borderColor: "#f0f0f0",
+        flex: 6,
+        color: "#444",
+        fontSize: 16,
+        backgroundColor: "#fff",
+        borderRadius: 50,
+        paddingHorizontal: 20
     },
     addButton : {
         flex: 1,
-        borderRadius: 2,
+        borderRadius: 50,
         alignItems : "center",
         justifyContent: "center",
         borderWidth: 1,
-        borderColor: "#e1e1e1"
+        borderColor: "#e1e1e1",
+        backgroundColor: "#FF7417"
     },
     addButtonText : {
         fontSize: 30,
@@ -253,10 +265,12 @@ const messageScreenStyles = StyleSheet.create({
         paddingVertical: 10,
         paddingRight: 30,
         alignSelf: "flex-start",
-        backgroundColor: "#fafafa",
+        backgroundColor: "#fff",
+        borderWidth: 1,
+        borderColor: "#f0f0f0",
         marginBottom: 10,
-        marginLeft: 10,
-        borderRadius: 10
+        marginLeft: 20,
+        borderRadius: 50
     },
     greatfulList: {
         fontFamily: "Roboto-Medium",
@@ -267,7 +281,7 @@ const messageScreenStyles = StyleSheet.create({
     greatfulListClose : {
         fontFamily: "OpenSans-Bold",
         fontSize: 16,
-        color: "#fafafa",
+        color: "red",
     },
     deleteButton : {
         position: "absolute",
@@ -275,8 +289,7 @@ const messageScreenStyles = StyleSheet.create({
         top: 5,
         paddingVertical: 5,
         paddingHorizontal: 10,
-        backgroundColor: "red",
-        borderRadius: 20
+        // backgroundColor: "red",
     }
 });
 

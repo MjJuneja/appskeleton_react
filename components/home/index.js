@@ -592,7 +592,7 @@ const kTenTestStyles = StyleSheet.create({
         borderBottomLeftRadius: 8,
         borderBottomRightRadius: 8,
         fontFamily: "Roboto-Medium",
-        marginTop: -15
+        paddingTop: 5
     },
     questionWrapper : {
         backgroundColor: "#fff",
