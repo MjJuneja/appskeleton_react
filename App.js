@@ -164,7 +164,7 @@ export default class App extends React.Component {
         userData = JSON.parse(userData);
         console.log(userData);
         this.setState({userData});
-        if(contentHit!==null && contentHit != "") {
+        if(content!==null && content != "") {
           this.submitVoice(content);
         }
       } else {
