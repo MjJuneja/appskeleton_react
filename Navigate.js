@@ -89,54 +89,98 @@ let TransitionConfiguration = () => {
 const Navigate = createStackNavigator({
     Home: {
         screen: Login,
+        navigationOptions: {
+            header: null,
+          }
     },
     PositiveChart : {
-        screen: PositiveChart
+        screen: PositiveChart,
+        navigationOptions: () => ({
+            title: `Back to Analysis`,
+            headerBackTitle: null,
+        }),
     },
     NegativeChart : {
-        screen: NegativeChart
+        screen: NegativeChart,
+        navigationOptions: () => ({
+            title: `Back to Analysis`,
+            headerBackTitle: null,
+        }),
     },
     SentimentChart : {
-        screen: SentimentChart
+        screen: SentimentChart,
+        navigationOptions: () => ({
+            title: `Back to Analysis`,
+            headerBackTitle: null,
+        }),
     },
     EmotionScreen : {
-        screen: EmotionScreen
+        screen: EmotionScreen,
+        navigationOptions: () => ({
+            title: `Mood`,
+            headerBackTitle: null,
+        }),
     },
     HomeQuestionChart : {
-        screen: HomeQuestionChart
+        screen: HomeQuestionChart,
+        navigationOptions: () => ({
+            title: `Back to Home`,
+            headerBackTitle: null,
+        }),
     },
     KTenTestQuestionChart : {
-        screen: KTenTestQuestionChart
+        screen: KTenTestQuestionChart,
+        navigationOptions: () => ({
+            title: `Back to K-10`,
+            headerBackTitle: null,
+        }),
     },
     Privacy : {
-        screen: Privacy
+        screen: Privacy,
+        navigationOptions: () => ({
+            title: `Terms and Privacy Policy`,
+            headerBackTitle: null,
+        }),
     },
     RegisterOptions : {
         screen: RegisterOptions,
         navigationOptions: () => ({
             title: `Register Using`,
-            headerBackTitle: null
+            headerBackTitle: null,
+            header: null,
         }),
     },
     HomeScreen : {
         screen: Home,
         navigationOptions: () => ({
             title: `Watch Your Talk`,
-            headerBackTitle: null
+            headerBackTitle: null,
+            header: null,
         }),
+        // navigationOptions: {
+        //     header: null,
+        // }
     },
     EmailRegister : {
         screen: EmailRegister,
         navigationOptions: () => ({
             title: `Email Registration`,
-            headerBackTitle: null
+            headerBackTitle: null,
+            header: null,
         }),
     },
     MessageScreen : {
-        screen: MessageScreen
+        screen: MessageScreen,
+        navigationOptions : {
+            header: null
+        }
     },
     AboutScreen : {
-        screen: AboutScreen
+        screen: AboutScreen,
+        navigationOptions: () => ({
+            title: `About`,
+            headerBackTitle: null,
+        }),
     },
     ForgotPassword : {
         screen: ForgotPassword,
@@ -154,31 +198,36 @@ const Navigate = createStackNavigator({
      Login: { screen: Login,
         navigationOptions: () => ({
             title: `Login`,
-            headerBackTitle: null
+            headerBackTitle: null,
+            header: null
           }),
      },
      KTenTest: { screen: KTenTest,
         navigationOptions: () => ({
             title: `K10 Test`,
-            headerBackTitle: null
+            headerBackTitle: null,
+            header: null
           }),
      },
      Analysis: { screen: Analysis,
         navigationOptions: () => ({
             title: `Analysis`,
-            headerBackTitle: null
+            headerBackTitle: null,
+            header: null
           }),
      },
      VideosList: { screen: VideosList,
         navigationOptions: () => ({
             title: `Videos`,
-            headerBackTitle: null
+            headerBackTitle: null,
+            header: null
           }),
      },
      Settings: { screen: Settings,
         navigationOptions: () => ({
             title: `Settings`,
-            headerBackTitle: null
+            headerBackTitle: null,
+            header: null
           }),
      },
      ChangePassword: { screen: ChangePassword,
@@ -203,10 +252,10 @@ const Navigate = createStackNavigator({
     LinkToRegister: {screen : LinkToRegister},
 },
 {
-        headerMode: 'none',
-        navigationOptions: {
-            headerVisible: false,
-        }
+        // headerMode: 'none',
+        // navigationOptions: {
+        //     headerVisible: false,
+        // }
 }
 );
 //chl gya?

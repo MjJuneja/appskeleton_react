@@ -167,6 +167,10 @@ export default class SentimentChart extends React.PureComponent {
 
             });
 
+            tempGraphData.score.map((value, index)=>{
+                tempGraphData.score[index] = parseInt((value*100).toFixed(0)) | 0;
+            });
+
             if(labels.length==0) {
                 labels.push(moment(startDate).toDate().getDate()+"/"+(moment(startDate).toDate().getMonth()+1));
             }
@@ -388,7 +392,9 @@ export default class SentimentChart extends React.PureComponent {
 
         const fill = 'rgb(134, 65, 244)'
         return (
-            this.state.splashScreenActive ? <SplashScreen /> :<ScrollView>
+            this.state.splashScreenActive ? <SplashScreen /> :
+            
+            <ScrollView>
 
             <View style={{display: "flex", flexDirection: "row", justifyContent: "center", margin: 20, marginBottom: 10}}>
             <TouchableOpacity
@@ -441,7 +447,7 @@ export default class SentimentChart extends React.PureComponent {
                     fill: 'black',
                     fontSize: 10,
                 }}
-                style={{marginLeft:0, width: 18}}
+                style={{marginLeft:0, width: 25}}
                 numberOfTicks={ 10 }
                 formatLabel={ value => `${value}%` }
         />
@@ -458,7 +464,7 @@ export default class SentimentChart extends React.PureComponent {
                 <View style={{ height: 400, flexDirection: 'row', padding: 10, width: this.state.deviceWidth }}>
                 <YAxis
                     data={ this.state.dataNow.datasets[0].data }
-                    style={{marginLeft:0, width: 18}}
+                    style={{marginLeft:0, width: 25}}
                     contentInset={{ left: 17, top: 5, bottom: 5 }}
                     svg={{
                         fill: 'black',
