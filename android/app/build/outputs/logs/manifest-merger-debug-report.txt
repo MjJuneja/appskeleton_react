@@ -61,7 +61,9 @@ ADDED from /Users/alien/Documents/infinityshark/appskeleton_react/android/app/sr
 	android:name
 		ADDED from /Users/alien/Documents/infinityshark/appskeleton_react/android/app/src/main/AndroidManifest.xml:20:23-70
 activity#com.facebook.react.devsupport.DevSettingsActivity
-ADDED from /Users/alien/Documents/infinityshark/appskeleton_react/android/app/src/main/AndroidManifest.xml:23:7-84
+ADDED from /Users/alien/Documents/infinityshark/appskeleton_react/android/app/src/main/AndroidManifest.xml:23:7-121
+	android:screenOrientation
+		ADDED from /Users/alien/Documents/infinityshark/appskeleton_react/android/app/src/main/AndroidManifest.xml:23:82-118
 	android:name
 		ADDED from /Users/alien/Documents/infinityshark/appskeleton_react/android/app/src/main/AndroidManifest.xml:23:17-81
 uses-sdk

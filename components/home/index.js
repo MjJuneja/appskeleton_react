@@ -433,42 +433,47 @@ class Home extends Component {
                 </TouchableOpacity>
                 <ScrollView>
                     
-                <View style={kTenTestStyles.personalisedMsgWrapper}>
+                    <View style={kTenTestStyles.personalisedMsgWrapper}>
                         <View style={kTenTestStyles.tipOfTheDayHeadingContainer}>
                             <Text style={kTenTestStyles.tipOfTheDayHeading}>Quote of the Day</Text>
-                            <Icon size={30} color="#FD6A02" containerStyle={kTenTestStyles.tipOfTheDayIcon} name={"flag"} />
+                            <Icon size={30} color="#fafafa" containerStyle={kTenTestStyles.tipOfTheDayIcon} name={"flag"} />
                         </View>
                         <Text style={kTenTestStyles.tipOfTheDayQuote}>"{this.state.quotes[this.state.quoteDate].quote}"</Text>
                         <Text style={kTenTestStyles.tipOfTheDayAuthor}> {'- '+this.state.quotes[this.state.quoteDate].author}</Text>
                     </View>
+
                     {!this.state.scoreView ?
                    ( 
                    <View>
 
+                    <Text style={kTenTestStyles.questionDescription}>Hey {this.state.userData.userInfo.firstName}, for us to be able to help you focus on abundance through positive speech, we would like to help you monitor your progress. If you can answer the three questions below, we can help you keep a track of your progress: on a scale of 1-10.</Text>
+
                     <View style={kTenTestStyles.questionWrapper}>
-                        <View style={kTenTestStyles.totalQuestionsBar}>
+                        {/* <View style={kTenTestStyles.totalQuestionsBar}>
                             <View style={[kTenTestStyles.totalQuestionsBarStatus, {width: this.state.questionBarWidth+"%"}]}></View>
-                        </View>
-                        <Text style={kTenTestStyles.questionDescription}>Hey {this.state.userData.userInfo.firstName}, for us to be able to help you focus on abundance through positive speech, we would like to help you monitor your progress. If you can answer the three questions below, we can help you keep a track of your progress: on a scale of 1-10.</Text>
+                        </View> */}
+                        
                         <View style={kTenTestStyles.q}>
                    <Text style={kTenTestStyles.question}>{"Q"+(this.state.currentQuestionCounter+1) + ") " + this.state.questions[this.state.currentQuestionCounter]}?</Text>
                             
                         </View>
+                        <View style={kTenTestStyles.optionWrapper}>
+                        <Text style={{ color: "#999", fontFamily:"Roboto-Medium", padding: 10}}>Use the slider below to choose between 1 to 10.</Text>
+                        <View style={kTenTestStyles.sliderStyle}>
+                            <Slider
+                                minimumValue={1}
+                                maximumValue={10}
+                                step={1}
+                                minimumTrackTintColor={"#FD6A02"}
+                                maximumTrackTintColor={"#FD6A02"}
+                                thumbTintColor={"#FD6A02"}
+                                value={this.state.sliderValue[this.state.currentQuestionCounter]}
+                                onValueChange={this.sliderValueHandler.bind(this, this.state.currentQuestionCounter)}
+                            />
+                        </View>
+                        <Text style={{alignSelf:"flex-end", fontSize: 50, fontFamily:"Raleway-ExtraBold", padding: 20, color: "#FD6A02"}}>{this.state.sliderValue[this.state.currentQuestionCounter]}</Text>
+                        </View>
                     </View>
-                    <Text style={{ color: "#999", fontFamily:"Roboto-Medium", padding: 10}}>Use the slider below to choose between 1 to 10.</Text>
-                    <View style={kTenTestStyles.sliderStyle}>
-                        <Slider
-                            minimumValue={1}
-                            maximumValue={10}
-                            step={1}
-                            minimumTrackTintColor={"#FD6A02"}
-                            maximumTrackTintColor={"#FD6A02"}
-                            thumbTintColor={"#FD6A02"}
-                            value={this.state.sliderValue[this.state.currentQuestionCounter]}
-                            onValueChange={this.sliderValueHandler.bind(this, this.state.currentQuestionCounter)}
-                        />
-                    </View>
-                    <Text style={{alignSelf:"flex-end", fontSize: 50, fontFamily:"Raleway-ExtraBold", padding: 20, color: "#FD6A02"}}>{this.state.sliderValue[this.state.currentQuestionCounter]}</Text>
 
                     <View style={kTenTestStyles.prevNextButtonWrapper}>
                             <View style={{flex: 1}}>
@@ -484,14 +489,17 @@ class Home extends Component {
                     : 
                    (
                     <View>   
+
+                        <View style={kTenTestStyles.soluctionFocus}><Text style={kTenTestStyles.takenText}>Solution Focus Test Score</Text></View>
                         <TouchableOpacity
                             onPress={this._handleNavigation.bind(this, "HomeQuestionChart")}
                         >
-                    <View style={[kTenTestStyles.questionWrapper, kTenTestStyles.questionWrapperTaken]}>
-                        <View style={kTenTestStyles.totalQuestionsBar}>
+
+
+                    <View style={kTenTestStyles.questionWrapperTaken}>
+                        {/* <View style={kTenTestStyles.totalQuestionsBar}>
                             <View style={[kTenTestStyles.totalQuestionsBarStatus, {width: this.state.questionBarWidth+"%"}]}></View>
-                        </View>
-                        <View><Text style={kTenTestStyles.takenText}>Solution Focus Test Score</Text></View>
+                        </View> */}
                         <Text style={kTenTestStyles.scoreText}>Today's Score:</Text>
                         <Text style={kTenTestStyles.score}>{this.state.score}/30</Text>
                         {/* <Text>{this.state.timeRemaining}</Text> */}
@@ -517,10 +525,15 @@ const kTenTestStyles = StyleSheet.create({
         position: "absolute",
         bottom: 20,
         right: 20,
-        backgroundColor : "orangered",
+        backgroundColor : "#FD6A02",
         zIndex: 10,
         padding: 15,
-        borderRadius: 35
+        borderRadius: 35,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 7,
     },
     emotionButtonImage : {
         height: 30,
@@ -529,10 +542,26 @@ const kTenTestStyles = StyleSheet.create({
     personalisedMsgWrapper : {
         position: "relative",
         margin: 15,
+        marginTop: 25,
         backgroundColor: "#fff",
         borderRadius: 5,
-        borderRadius: 8,
-        zIndex: 2
+        zIndex: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 10
+    },
+    soluctionFocus : {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 50,
+        elevation: 4,
+        margin: 15,
+        marginTop: 20,
+        backgroundColor: "#FD6A02",
+        borderRadius: 5
     },
     tipOfTheDayBackground : {
         position: "absolute",
@@ -544,27 +573,32 @@ const kTenTestStyles = StyleSheet.create({
         borderRadius: 8
     },
     tipOfTheDayIcon : {
-        backgroundColor: "#fff",
         alignSelf: "center",
         paddingBottom: 5
     },
     tipOfTheDayHeadingContainer : {
         borderTopLeftRadius: 8,
         borderTopRightRadius: 8,
-        borderWidth: 1,
-        borderColor: "#e9e9e9",
-        borderBottomColor: "#f2f2f2"
+        // borderWidth: 1,
+        // borderColor: "#e9e9e9",
+        borderBottomColor: "#f2f2f2",
+        backgroundColor: "#FD6A02",
+        padding: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 7,
     },
     tipOfTheDayHeading : {
-        backgroundColor: "#fff",
         fontSize: 16,
         paddingTop: 10,
         paddingLeft: 25,
         paddingRight: 25,
-        fontFamily: "Roboto-Medium",
+        fontFamily: "Roboto-Bold",
         borderRadius: 8,
-        color: "#333",
-        textAlign: "center"
+        color: "#fff",
+        textAlign: "center",
     },
     tipOfTheDayQuote : {
         paddingTop: 12,
@@ -573,9 +607,9 @@ const kTenTestStyles = StyleSheet.create({
         color: "#333",
         fontSize: 16,
         backgroundColor: "#fafafa",
-        borderColor: "#e9e9e9",
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
+        // borderColor: "#e9e9e9",
+        // borderLeftWidth: 1,
+        // borderRightWidth: 1,
         fontFamily: "OpenSans-Regular"
     },
     tipOfTheDayAuthor : {
@@ -585,21 +619,42 @@ const kTenTestStyles = StyleSheet.create({
         color: "#555",
         fontSize: 15,
         backgroundColor: "#fafafa",
-        borderColor: "#e9e9e9",
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderBottomWidth: 1,
+        // borderColor: "#e9e9e9",
+        // borderLeftWidth: 1,
+        // borderRightWidth: 1,
+        // borderBottomWidth: 1,
         borderBottomLeftRadius: 8,
         borderBottomRightRadius: 8,
         fontFamily: "Roboto-Medium",
         paddingTop: 5
     },
     questionWrapper : {
+        // marginTop: 15,
+        // marginHorizontal: 20,
+        // padding: 20,
+        // paddingHorizontal: 30,
+        // borderRadius: 5,
+        // backgroundColor: "#FF7417",
+        // justifyContent: "center",
+        // shadowColor: '#000',
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.8,
+        // shadowRadius: 2,
+        // elevation: 10
+    },
+    optionWrapper : {
+        marginHorizontal: 20,
+        padding: 20,
+        paddingHorizontal: 30,
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
         backgroundColor: "#fff",
-        padding: 10,
-        paddingTop: 0,
-        paddingBottom: 13,
-        marginTop: 10
+        justifyContent: "center",
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 10
     },
     totalQuestionsBar : {
         height: 3,
@@ -613,15 +668,25 @@ const kTenTestStyles = StyleSheet.create({
         backgroundColor: "blue"
     },
     q  : {
-        // backgroundColor: "#FD6A02",
-        // borderRadius: 8,
-        // padding: 10,
-        marginTop: 10
+        marginTop: 25,
+        marginHorizontal: 20,
+        padding: 20,
+        paddingHorizontal: 30,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        backgroundColor: "#FF7417",
+        justifyContent: "center",
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 10
     },
     question : {
-        fontSize: 18,
+        lineHeight: 25,
+        fontSize: 16 ,
+        color: "#fafafa",
         fontFamily: "OpenSans-SemiBold",
-        color: "#222"
     },
     optionButtons : {
         marginTop: 15,
@@ -655,7 +720,9 @@ const kTenTestStyles = StyleSheet.create({
         borderRadius: 3,
         padding: 12,
         marginRight: 20,
-        marginLeft: 20
+        marginLeft: 20,
+        marginBottom: 70,
+        marginTop: 30
     },
     prevNextButtonText : {
         alignSelf: "center",
@@ -663,23 +730,40 @@ const kTenTestStyles = StyleSheet.create({
         fontFamily: "OpenSans-SemiBold"
     },
     questionWrapperTaken : {
-        marginTop: 40
+        marginTop: 20,
+        backgroundColor: "#FD6A02",
+        borderRadius: 5,
+        padding: 10,
+        paddingTop: 0,
+        paddingBottom: 16,
+        marginHorizontal: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 50,
+        elevation: 4,
+        marginBottom: 40
     },
     takenText : {
-        fontSize: 30,
+        fontSize: 20,
         fontFamily: "Raleway-Medium",
         textAlign: "center",
-        margin: 20
+        margin: 20,
+        marginHorizontal: 30,
+        color: "#fff"
     },
     scoreText : {
         alignSelf: "flex-start",
-        fontSize: 16,
-        fontFamily: "Roboto-Medium",
-        marginTop: 20
+        fontSize: 17,
+        fontFamily: "OpenSans-SemiBold",
+        marginTop: 20,
+        marginBottom: 10,
+        marginHorizontal: 20,
+        color: "#Fff"
     },
     score: {
         alignSelf: "flex-end",
-        color: "#FD6A02",
+        color: "#fff",
         fontSize: 50,
         fontFamily: "Raleway-ExtraBold"
     },
@@ -692,15 +776,27 @@ const kTenTestStyles = StyleSheet.create({
         marginTop: 10
     },
     questionDescription : {
-        color: "#999",
-        fontSize: 16,
-        fontFamily: "Roboto-Medium"
+        marginTop: 15,
+        marginHorizontal: 20,
+        padding: 20,
+        paddingHorizontal: 30,
+        borderRadius: 5,
+        backgroundColor: "#FF7417",
+        lineHeight: 25,
+        fontSize: 16 ,
+        color: "#fafafa",
+        fontFamily: "OpenSans-SemiBold",
+        justifyContent: "center",
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 10
     },
     sliderStyle: {
-        margin: 10, 
-        padding: 10, 
         // backgroundColor: "#FFF", 
-        borderRadius: 2,
+        // borderRadius: 2,
+        marginTop: 10
     }
 });
 

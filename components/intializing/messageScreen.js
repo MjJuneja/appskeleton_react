@@ -158,7 +158,7 @@ class MessageScreen extends Component {
                             onPress={this.handleNavigation.bind(this, "HomeScreen")}
                             style={{marginTop: 20, marginBottom: 20}}
                         >
-                    <Text style={{color: "#fff", fontSize: 16, fontFamily:"Roboto-Bold", width:"50%", padding:10, alignSelf: "center", textAlign:"center", backgroundColor:"#FF7417", borderRadius: 3}}>CONTINUE</Text>
+                    <Text style={{color: "#fff", fontSize: 16, marginTop: 10, fontFamily:"Roboto-Bold", width:"50%", padding:10, alignSelf: "center", textAlign:"center", backgroundColor:"#FF7417", borderRadius: 5}}>CONTINUE</Text>
                 </TouchableOpacity>
 
             </ScrollView>
@@ -196,30 +196,42 @@ const messageScreenStyles = StyleSheet.create({
     },
     personalizedMessage : {
         // backgroundColor: "#e3bb88",
-        position: "relative",
         marginTop: 15,
+        marginHorizontal: 20,
         padding: 20,
-        borderRadius: 2,
+        paddingHorizontal: 30,
+        borderRadius: 5,
         lineHeight: 25,
         fontSize: 16 ,
-        color: "#333",
+        color: "#fafafa",
+        backgroundColor: "#FF7417",
         fontFamily: "OpenSans-SemiBold",
         justifyContent: "center",
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 2,
+        elevation: 10
     },
     generalMessage : {
         // backgroundColor: "#db9864",
         // 644749
+        marginTop: 25,
+        marginHorizontal: 20,
         padding: 20,
-        borderRadius: 2,
+        paddingHorizontal: 30,
+        borderRadius: 5,
         lineHeight: 25,
         fontSize: 16,
-        color: "#333",
+        color: "#fafafa",
+        backgroundColor: "#FF7417",
         fontFamily: "OpenSans-SemiBold",
-        justifyContent: "center"
+        justifyContent: "center",
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 10
     },
     greatfulContainer : {
         // backgroundColor: "#b1695a",
@@ -228,6 +240,7 @@ const messageScreenStyles = StyleSheet.create({
     },
     greatfulHeading : {
         fontSize: 16,
+        marginTop: 15,
         fontFamily : "Roboto-Medium",
         color : "#FF7417",
         textAlign: "center"
@@ -261,27 +274,29 @@ const messageScreenStyles = StyleSheet.create({
         color: "#fff"
     },
     greatfulListWrapper : {
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        paddingRight: 30,
-        alignSelf: "flex-start",
-        backgroundColor: "#fff",
-        borderWidth: 1,
-        borderColor: "#f0f0f0",
-        marginBottom: 10,
-        marginLeft: 20,
-        borderRadius: 50
+        marginTop: 20,
+        marginHorizontal: 20,
+        padding: 20,
+        paddingHorizontal: 30,
+        borderRadius: 5,
+        backgroundColor: "#FF7417",
+        justifyContent: "center",
+        shadowColor: 'rgba(0,0,0,0.4)',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 10
     },
     greatfulList: {
-        fontFamily: "Roboto-Medium",
-        fontSize: 16,
-        color: "#444",
-        marginRight: 20
+        fontFamily: "OpenSans-SemiBold",
+        lineHeight: 25,
+        fontSize: 16 ,
+        color: "#fafafa"
     },
     greatfulListClose : {
         fontFamily: "OpenSans-Bold",
         fontSize: 16,
-        color: "red",
+        color: "#e1e1e1",
     },
     deleteButton : {
         position: "absolute",

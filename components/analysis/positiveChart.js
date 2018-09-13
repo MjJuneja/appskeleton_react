@@ -2,7 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import SplashScreen from "../splashscreen";
-import {Button, View, AsyncStorage, Text, ScrollView, TouchableOpacity, ProgressBarAndroid, Dimensions} from "react-native";
+import {Button, View, AsyncStorage, Text, ScrollView, TouchableOpacity, StyleSheet, ProgressBarAndroid, Dimensions} from "react-native";
+import { Icon } from 'react-native-elements'
 
 import { BarChart,LineChart, Grid, YAxis, XAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
@@ -22,6 +23,7 @@ export default class PositiveChart extends React.PureComponent {
             valueType: 0,
             monthPart: 2,
             graphYear: "",
+            graphDate: "",
             dataNow: {
                 labels: [0],
                 datasets: [{
@@ -129,12 +131,19 @@ export default class PositiveChart extends React.PureComponent {
             //       console.log(moment(dateTemp).toDate());
             //       dateTemp = moment(dateTemp).add(1, "days").toDate();
             //   }
-
+              let tempDate1 = "";
               let labels = [];
               let tempGraphData = {"positive": [], "negative": [], "neutral": []};
 
             //   console.log("start date", dateTemp);
             //   console.log("end date", endDateMoment);
+            if(this.state.valueType == 0) {
+                // 12,3,6,9,12,3,6,9,12
+                labels = ["12AM", "3AM", "6AM", "9AM", "12PM", "3PM", "6PM", "9PM", "12AM"];
+                tempGraphData.positive= [0,0,0,0,0,0,0,0,0];
+                tempGraphData.negative= [0,0,0,0,0,0,0,0,0];
+                tempGraphData.neutral= [0,0,0,0,0,0,0,0,0];
+            } else {
               for(;moment(dateTemp).isBefore(endDateMoment);) {
                 //   console.log("inside ...");
                 tempGraphData.positive.push(0);
@@ -144,19 +153,67 @@ export default class PositiveChart extends React.PureComponent {
                 // console.log("current date", dateTemp);
                 dateTemp = moment(dateTemp).add(1, "days").toDate();
               }
+            }
               let tempGraphDataPercentage = [];
             //   console.log("graph data",tempGraphData);
 
               if(tempGraphData.positive.length==0) {
-                //   console.log("********** length 0 h");
-                labels.push(moment(startDate).toDate().getDate()+"/"+(moment(startDate).toDate().getMonth()+1));
+                  console.log("********** length 0 h");
+                // labels.push(moment(startDate).toDate().getDate()+"/"+(moment(startDate).toDate().getMonth()+1));
+
+                labels = ["12AM", "3AM", "6AM", "9AM", "12PM", "3PM", "6PM", "9PM", "12AM"];
                 tempGraphDataPercentage.push(0);
+
+                let tempDate = moment().subtract(5, "hours").subtract(30, "minutes").toDate();
+
+                console.log("in 24 horus", tempDate.getHours());
             } else {
 
               this.setState({graphData:tempGraphData});
               let temp = data.data.data;
 
+              console.log("value type, ", this.state.valueType);
 
+              if(this.state.valueType==0) { 
+
+                tempDate1 = moment(startDate).subtract(5, "hours").subtract(30, "minutes").toDate();
+                tempDate1 = tempDate1.getDate()+"/"+(tempDate1.getMonth()+1)+"/"+tempDate1.getFullYear();
+
+                temp.map((value)=>{
+                    let tempDate = moment(value.createdOn).subtract(5, "hours").subtract(30, "minutes").toDate();
+
+                    console.log(value.createdOn);
+                    let tempHours = parseInt(tempDate.getHours());
+                    console.log("created on 24, ", tempHours);
+                    
+                    console.log("*#############*");
+    
+                    if(tempHours == 0) {
+                        tempIndex = 0;
+                    } else if(tempHours<3) {
+                        tempIndex = 1;
+                    } else if (tempHours>=3 && tempHours<6) {
+                        tempIndex = 2;
+                    } else if (tempHours>=6 && tempHours<9) {
+                        tempIndex = 3;
+                    } else if (tempHours>=9 && tempHours<12) {
+                        tempIndex = 4;
+                    } else if (tempHours>=12 && tempHours<15) {
+                        tempIndex = 5;
+                    } else if (tempHours>=15 && tempHours<18) {
+                        tempIndex = 6;
+                    } else if (tempHours>=18 && tempHours<21) {
+                        tempIndex = 7;
+                    } else {
+                        tempIndex = 8;
+                    }
+
+                    tempGraphData.positive[tempIndex]+=value.positive;
+                    tempGraphData.negative[tempIndex]+=value.negative;
+                    tempGraphData.neutral[tempIndex]+=value.neutral;
+    
+                });
+              } else {
 
             temp.map((value)=>{
                 let tempDate = moment(value.createdOn).subtract(5, "hours").subtract(30, "minutes").toDate();
@@ -167,6 +224,8 @@ export default class PositiveChart extends React.PureComponent {
                 console.log("created on", value.createdOn);
                 console.log("tempDM", tempDM);
                 console.log(tempIndex);
+                console.log("in 24 horus", tempDate.getHours());
+
                 console.log("*#############*");
 
                 tempGraphData.positive[tempIndex]+=value.positive;
@@ -174,6 +233,7 @@ export default class PositiveChart extends React.PureComponent {
                 tempGraphData.neutral[tempIndex]+=value.neutral;
 
             });
+        }
             
             // console.log("tesst date", moment("2018-09-10T19:10:25.542Z").subtract(5, "hours").subtract(30, "minutes").toDate());
 
@@ -204,7 +264,9 @@ export default class PositiveChart extends React.PureComponent {
                     data : tempGraphDataPercentage
                 }]
             }
-            this.setState({graphData: tempGraphDataPercentage, dataNow : dataNow});
+            let graphYear = moment(startDate).add(1, "days").toDate().getFullYear();
+            this.setState({graphYear});
+            this.setState({graphData: tempGraphDataPercentage, dataNow : dataNow, graphDate: tempDate1, graphYear});
             this.setState({progressBarActive: false});
             console.log("final data", dataNow);
           }).catch(err=>{
@@ -443,6 +505,7 @@ export default class PositiveChart extends React.PureComponent {
         
         // const fill = 'rgb(134, 65, 244)';
 
+        this.state.splashScreenActive = false;
         return (
             this.state.splashScreenActive ? <SplashScreen /> : <ScrollView>
             {/* <BarChart
@@ -454,39 +517,48 @@ export default class PositiveChart extends React.PureComponent {
                 <Grid/>
             </BarChart> */}
 
-            <View style={{display: "flex", flexDirection: "row", justifyContent: "center", margin: 20, marginBottom: 10}}>
+            <View style={chartStyles.daySelectWrapper}>
             <TouchableOpacity
-                style={{width: 100, backgroundColor: "#379be5", padding: 10, borderRadius: 3, marginHorizontal: 5}}
+                style={this.state.valueType==0 ? chartStyles.buttonDaySelected : chartStyles.buttonDay }
                 onPress= {this.graphDataHandle.bind(this, 0)}
             >
-                <Text style={{fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"}}>Today</Text>
+                <Text style={this.state.valueType == 0 ? chartStyles.buttonDaySelectedText : chartStyles.buttonDayText }>Today</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={{width: 100, backgroundColor: "#379be5", padding: 10, borderRadius: 3, marginHorizontal: 5}}
+                style={this.state.valueType==1 ? chartStyles.buttonDaySelected :  chartStyles.buttonDay}
                 onPress= {this.graphDataHandle.bind(this, 1)}
             >
-                <Text style={{fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"}}>Week</Text>
+                <Text style={this.state.valueType == 1 ? chartStyles.buttonDaySelectedText : chartStyles.buttonDayText }>Week</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={{width: 100, backgroundColor: "#379be5", padding: 10, borderRadius: 3, marginHorizontal: 5}}
+                style={this.state.valueType==2 ? chartStyles.buttonDaySelected :  chartStyles.buttonDay}
                 onPress= {this.graphDataHandle.bind(this, 2)}
             >
-                <Text style={{fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"}}>Month</Text>
+                <Text style={this.state.valueType == 2 ? chartStyles.buttonDaySelectedText : chartStyles.buttonDayText }>Month</Text>
             </TouchableOpacity>
             </View>
 
             <View style={{display: "flex", flexDirection: "row", justifyContent: "center", marginBottom: 20}}>
             <TouchableOpacity
-                style={{width: 100, backgroundColor: "#FF7417", padding: 10, borderRadius: 3, marginHorizontal: 5}}
+                style={{padding: 10, paddingTop: 13, paddingHorizontal: 20, borderRadius: 3, marginRight: 25}}
                 onPress= {this._previousHandle}
             >
-                <Text style={{fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"}}>Previous</Text>
+                {/* <Text style={{fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"}}>Previous</Text> */}
+                <Icon size={25} color="#FF7417" name="navigate-before"/>
             </TouchableOpacity>
+            {this.state.valueType==0 ?
+                <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphDate}</Text> : <Text></Text>
+            }
+
+            {this.state.valueType==1 || this.state.valueType==2 ?
+                <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphYear}</Text> : <Text></Text>
+            }
             <TouchableOpacity
-                style={{width: 100, backgroundColor: "#FF7417", padding: 10, borderRadius: 3, marginHorizontal: 5}}
+                style={{padding: 10, paddingTop: 13, paddingHorizontal: 20, borderRadius: 3, marginLeft: 25}}
                 onPress= {this._nextHandle}
             >
-                <Text style={{fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"}}>Next</Text>
+                {/* <Text style={{fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"}}>Next</Text> */}
+                <Icon size={25} color="#FF7417" name="navigate-next"/>
             </TouchableOpacity>
             </View>
 
@@ -495,8 +567,16 @@ export default class PositiveChart extends React.PureComponent {
             <ProgressBarAndroid styleAttr="Horizontal" color="#FF7417" />
             : <View></View>}
             </View>
-                {this.state.valueType==0 ? 
-<View style={{ height: 400, flexDirection: 'row', padding: 10, width: this.state.deviceWidth }}>
+
+            <View style= {{shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+        elevation: 10,
+        backgroundColor: "#fff",
+        marginHorizontal: 12,
+        borderRadius: 5, marginBottom: 10, paddingTop: 10}}>
+<View style={{ height: 400, flexDirection: 'row', padding: 7, width: this.state.deviceWidth-30, marginBottom: 5 }}>
                 <YAxis
                 data={ [0,...this.state.dataNow.datasets[0].data] }
                 contentInset={{ left: 7, top: 5, bottom: 5 }}
@@ -510,52 +590,25 @@ export default class PositiveChart extends React.PureComponent {
         />
         <BarChart
             style={{ flex: 1, marginLeft: 16 }}
-            data={ [...this.state.dataNow.datasets[0].data,0,0,0,0,0,0] }
-            svg={{ fill: '#FF7417' }}
-            >
-             <Grid direction={Grid.Direction.HORIZONTAL}/>
-                {/* <Labels/> */}
-        </BarChart>
-            </View>
-                :
-                <View style={{ height: 400, flexDirection: 'row', padding: 10, width: this.state.deviceWidth }}>
-                <YAxis
-                    data={ this.state.dataNow.datasets[0].data }
-                    style={{marginLeft:0, width: 18}}
-                    contentInset={{ left: 17, top: 5, bottom: 5 }}
-                    svg={{
-                        fill: 'black',
-                        fontSize: 10,
-                    }}
-                    numberOfTicks={ 10 }
-                    formatLabel={ value => `${value}%` }
-
-                    />
-            <BarChart
-            style={{ flex: 1, marginLeft: 16 }}
             data={ this.state.dataNow.datasets[0].data }
             svg={{ fill: '#FF7417' }}
             >
              <Grid direction={Grid.Direction.HORIZONTAL}/>
                 {/* <Labels/> */}
         </BarChart>
-        </View>
-                }
+            </View>
             
-            <View style={{marginHorizontal: 10, marginVertical: 5}}>
+            <View style={{marginHorizontal: 12, marginVertical: 2}}>
                 <XAxis
                         data={ this.state.dataNow.labels }
                         scale={shape.scaleBand}
                         formatLabel={ (value, index) => this.state.dataNow.labels[index]}
-                        style={{ marginBottom: 20}}
-                        contentInset={{ top: 15, bottom: 10, left: 50, right: 20 }}
+                        style={{ marginBottom: 10}}
+                        contentInset={{ top: 10, bottom: 10, left: 50, right: 20 }}
                         labelStyle={ { color: 'black' } }
                     />
                 </View>
-
-            {this.state.valueType==2 ?
-                <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphYear}</Text> : <Text></Text>
-            }
+                </View>
 
             <View style={{marginBottom:40, marginTop: 15}}>
                   <Text style={{textAlign: "center", fontSize: 17, fontFamily: "Roboto-Bold"}}>Positive Words</Text>
@@ -566,3 +619,37 @@ export default class PositiveChart extends React.PureComponent {
     }
  
 }
+
+
+const chartStyles = StyleSheet.create({
+    daySelectWrapper : {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        margin: 20,
+        marginTop: 30,
+        marginBottom: 10,
+    },
+    buttonDaySelected : {
+        shadowColor: '#000',
+        borderRadius: 2,
+        shadowOffset: { width : 2, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+        elevation: 10,
+        width: 100, 
+        backgroundColor: "#FF7417", 
+        padding: 12
+    },
+    buttonDay : {
+        width: 100, 
+        backgroundColor: "#fff", 
+        padding: 12
+    },
+    buttonDaySelectedText : {
+        fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"
+    },
+    buttonDayText :{
+        fontFamily: "Roboto-Medium", color: "#FF7417", alignSelf: "center"
+    }
+});

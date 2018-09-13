@@ -50,6 +50,7 @@ class Login extends Component {
             this._handleNavigation("MessageScreen");
           } else {
               console.log("No data found");
+
           }
           this.setState({splashScreenActive: false});
          } catch (error) {

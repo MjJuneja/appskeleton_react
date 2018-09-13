@@ -315,13 +315,14 @@ class Analysis extends Component {
             
             <ScrollView>
             <View style={analysisStyles.container}>
-            <Text style={{fontFamily:"Raleway-Bold", fontSize: 20, alignSelf: "center", marginBottom: 20, marginTop: 25}}>Today's Analysis</Text>
+            <Text style={{fontFamily:"Roboto-Bold", fontSize: 22, alignSelf: "center", color: "#333", marginBottom: 20, marginTop: 25}}>Today's Analysis</Text>
                 <TouchableOpacity
                     onPress={this._handleNavigation.bind(this, "PositiveChart")}
                     style={analysisStyles.listButton}
                 >
                     <View style={analysisStyles.moodList}>
-                        <Text style={analysisStyles.cardText}>Positive Words</Text><Text style={analysisStyles.percentage}>{this.state.positivePercentage+"%"}</Text>
+                        <Text style={analysisStyles.cardText}>Positive Words</Text>
+                        <Text style={analysisStyles.percentage}>{this.state.positivePercentage+"%"}</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -355,16 +356,16 @@ class Analysis extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[analysisStyles.listButton, {paddingBottom: 0}]}
+                    style={[analysisStyles.listButton, {marginBottom: 50}]}
                 >
                     <View style={analysisStyles.moodList}>
                         <Text style={analysisStyles.cardText}>Emotion</Text>
-                        <View style={{alignSelf: "flex-end"}}>
-                            {this.state.image}
-                        </View>
+                        <Text style={analysisStyles.percentage}>
+                        {this.state.image}
                         {/* <View>
                             {this.state.image}
                         </View> */}
+                        </Text>
                     </View>
                 </TouchableOpacity>
                 </View>
@@ -377,17 +378,22 @@ class Analysis extends Component {
 const analysisStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f4f5f8",
+        backgroundColor: "#fff",
         paddingBottom: 100
     },
     emotionButton : {
         position: "absolute",
-        bottom: 60,
+        bottom: 80,
         right: 20,
-        backgroundColor : "orangered",
+        backgroundColor : "#FD6A02",
         zIndex: 10,
         padding: 15,
-        borderRadius: 35
+        borderRadius: 35,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 7,
     },
     emotionButtonImage : {
         height: 30,
@@ -396,9 +402,8 @@ const analysisStyles = StyleSheet.create({
     cardText : {
         fontSize: 17,
         fontFamily: "OpenSans-SemiBold",
-        color: "#333",
-        position: "relative",
-        top: 7
+        color: "#fff",
+        // flex: 1
     },
     backgroundVideo : {
         position: 'absolute',
@@ -408,35 +413,47 @@ const analysisStyles = StyleSheet.create({
         right: 0
     },
     moodList : {
-        backgroundColor: "#fff",
-        padding: 20,
-        borderRadius: 5
+        // backgroundColor: "#FD6A02",
+        // padding: 20,
+        // borderRadius: 5,
+        // shadowColor: '#000',
+        // shadowOffset: { width: 2, height: 2 },
+        // shadowOpacity: 0.3,
+        // shadowRadius: 3,
+        // elevation: 10,
+        // flexDirection: "row"
     },
     listButton : {
         marginHorizontal: 20,
-        marginVertical: 10,
+        marginVertical: 15,
         borderRadius: 5,
-        paddingBottom: 20,
-        backgroundColor: "#fff"
+        backgroundColor: "#FD6A02",
+        padding: 20,
+        borderRadius: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        elevation: 10,
     },
     percentage : {
-        alignSelf: "flex-end",
-        fontSize: 22,
-        fontWeight: "500",
-        color: "#FF7417",
-        position: "absolute",
-        right: 20,
-        top: 25
+        textAlign: "right",
+        fontSize: 25,
+        fontFamily: "Raleway-ExtraBold",
+        color: "#Fff",
+        marginTop: 10
+        // position: "absolute",
+        // right: 20,
+        // top: 25,
+        // flex: 1
     },
     moodImage : {
         height: 65,
         width: 65,
-        marginTop: -18,
     },
     emotionImage : {
-        height: 32,
-        width: 32,
-        marginTop: -14
+        height: 65,
+        width: 65,
     }
 });
 

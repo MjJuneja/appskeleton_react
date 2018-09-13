@@ -307,6 +307,7 @@ class VideoList extends Component {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress = {() => Linking.openURL('https://www.youtube.com/watch?v=fLJsdqxnZb0&t=330s')}
+                                style={{marginBottom: 80}}
                             >
                                 <View style={videoListStyles.listContainer}>
                                     <Image
@@ -335,12 +336,17 @@ const videoListStyles = StyleSheet.create({
     },
     emotionButton : {
         position: "absolute",
-        bottom: 60,
+        bottom: 80,
         right: 20,
-        backgroundColor : "orangered",
+        backgroundColor : "#FD6A02",
         zIndex: 10,
         padding: 15,
-        borderRadius: 35
+        borderRadius: 35,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 7,
     },
     emotionButtonImage : {
         height: 30,
