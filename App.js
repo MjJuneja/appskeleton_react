@@ -7,6 +7,8 @@ import SplashScreen from './components/splashscreen';
 import Voice from 'react-native-voice';
 import axios from 'axios';
 
+const DURATION = 1500;
+
 const ReactNativeVolumeController = NativeModules.ReactNativeVolumeController;
 
 export default class App extends React.Component {
@@ -90,6 +92,7 @@ export default class App extends React.Component {
           [
             {text: 'OK', onPress: () => console.log('OK Pressed')}
           ]);
+          Vibration.vibrate(DURATION);
           console.log("don't do that.. himanshu loves you...");
         }
       }

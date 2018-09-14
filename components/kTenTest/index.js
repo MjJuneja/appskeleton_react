@@ -385,7 +385,7 @@ class KTenTest extends Component {
 
                 <Text style={kTenTestStyles.disclaimerTaken}>Disclaimer - This test is not intended to be a replacement for treatment nor any sort of medical intervention.{"\n"}You are only required to do this test once a day.</Text>
 
-                <View style={kTenTestStyles.soluctionFocus}><Text style={kTenTestStyles.takenText}>Solution Focus Test Score</Text></View>
+                <View style={kTenTestStyles.soluctionFocus}><Text style={kTenTestStyles.takenText}>K-10 Test Score</Text></View>
 
                 <TouchableOpacity
                             onPress={this._handleNavigation.bind(this, "KTenTestQuestionChart")}

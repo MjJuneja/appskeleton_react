@@ -25,6 +25,7 @@ export default class NegativeChart extends React.PureComponent {
             monthPart: 2,
             graphYear: "",
             graphDate: "",
+            graphWeek: "",
             dataNow: {
                 labels: [0],
                 datasets: [{
@@ -246,7 +247,8 @@ export default class NegativeChart extends React.PureComponent {
             
             let graphYear = moment(startDate).add(1, "days").toDate().getFullYear();
             this.setState({graphYear});
-            this.setState({graphData: tempGraphDataPercentage, dataNow : dataNow, graphDate: tempDate1, graphYear});
+            let graphWeek = labels[0]+"/"+graphYear+" - "+labels[6]+"/"+graphYear;
+            this.setState({graphData: tempGraphDataPercentage, dataNow : dataNow, graphDate: tempDate1, graphYear, graphWeek});
             // console.log("final data", tempGraphDataPercentage);
             this.setState({progressBarActive: false});
           }).catch(err=>{
@@ -503,7 +505,11 @@ export default class NegativeChart extends React.PureComponent {
                 <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphDate}</Text> : <Text></Text>
             }
 
-            {this.state.valueType==1 || this.state.valueType==2 ?
+            { this.state.valueType==1 ?
+                <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphWeek}</Text> : <Text></Text>
+            }
+
+            { this.state.valueType==2 ?
                 <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphYear}</Text> : <Text></Text>
             }
             <TouchableOpacity

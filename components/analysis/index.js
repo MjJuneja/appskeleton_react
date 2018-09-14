@@ -195,7 +195,7 @@ class Analysis extends Component {
                 sum+=value.score;
               });
               console.log("sum", sum);
-              sentimentsPercentage = parseInt((sum*100).toFixed(2))|0;
+              sentimentsPercentage = parseInt(((sum*100)/totalData.length).toFixed(2))|0;
               console.log("sentiment", sentimentsPercentage);
               this.setState({sentimentsPercentage, splashScreenActive: false});
             //   let tempGraphData = {"positive": [], "negative": []};
