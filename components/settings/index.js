@@ -88,6 +88,7 @@ export default class Settings extends React.Component {
         navigate('AboutScreen');
       } else if (key=="Logout") {
         this._removeData();
+        this.setState({splashScreenActive: false});
         const { navigate } = this.props.navigation;
         navigate('Home');
       }

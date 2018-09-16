@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {StyleSheet, View, Text, Image, TextInput, TouchableOpacity, TouchableHighlight, AsyncStorage} from 'react-native';
+import {StyleSheet, View, Text, Image, TextInput, TouchableOpacity, TouchableHighlight, AsyncStorage, ToastAndroid} from 'react-native';
 import SplashScreen from "../splashscreen";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import axios from 'axios';
@@ -75,6 +75,7 @@ class Login extends Component {
               if(data.data.message=="Access denied") {
                 this._removeData();
                 this._handleNavigation('Home');
+                this.setState({splashScreenActive: false});
               } else {
                   console.log("access granted");
                   this._handleNavigation("GreatfulScreen");
@@ -82,6 +83,16 @@ class Login extends Component {
           }).catch(err=>{
                 console.log(err);
           });
+      }
+
+      _removeData = async()=> {
+        console.log("removing data");
+        try {
+          const userData = await AsyncStorage.removeItem('userData');
+         } catch (error) {
+           // Error retrieving data
+           console.log(error);
+         }
       }
 
     _storeData = async (userData) => {
@@ -97,9 +108,13 @@ class Login extends Component {
       }
 
     loginHandle = ()=> {
-        this.refs.toast.show("Verifying...", 500, () => {
-            // something you want to do at close
-        });
+        ToastAndroid.showWithGravityAndOffset(
+            'Verifying..',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+          );
         axios({
             method: 'post',
             url: 'http://13.238.16.112/login/login',
