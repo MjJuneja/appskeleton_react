@@ -377,7 +377,7 @@ const analysisStyles = StyleSheet.create({
         position: "absolute",
         bottom: 80,
         right: 20,
-        backgroundColor : "#FD6A02",
+        backgroundColor : "rgb(255,68,34)",
         zIndex: 10,
         padding: 15,
         borderRadius: 35,
@@ -405,7 +405,7 @@ const analysisStyles = StyleSheet.create({
         right: 0
     },
     moodList : {
-        // backgroundColor: "#FD6A02",
+        // backgroundColor: "rgb(255,68,34)",
         // padding: 20,
         // borderRadius: 5,
         // shadowColor: '#000',
@@ -419,7 +419,7 @@ const analysisStyles = StyleSheet.create({
         marginHorizontal: 20,
         marginVertical: 15,
         borderRadius: 5,
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         padding: 20,
         borderRadius: 5,
         shadowColor: '#000',

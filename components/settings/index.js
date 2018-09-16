@@ -289,7 +289,7 @@ _removeData = async()=> {
                             onPress={this.navigateSettings.bind(this, "Profile")}
                         >
                             <View style={settingStyles.icons}>
-                                <Icon size={20}  color="#FD6A02" name={'person'} />
+                                <Icon size={20}  color="rgb(255,68,34)" name={'person'} />
                             </View>
                             <Text style={settingStyles.settingOptionsText}>{"Profile"}</Text>
                         </TouchableOpacity>
@@ -299,7 +299,7 @@ _removeData = async()=> {
                             onPress={this.navigateSettings.bind(this, 'Microphone')}
                         >
                             <View style={settingStyles.icons}>
-                                <Icon size={20}  color="#FD6A02" name={this.state.micIcon} />
+                                <Icon size={20}  color="rgb(255,68,34)" name={this.state.micIcon} />
                             </View>
                             <Text style={settingStyles.settingOptionsText}>{'Microphone'}</Text>
                         </TouchableOpacity>
@@ -309,7 +309,7 @@ _removeData = async()=> {
                             onPress={this.navigateSettings.bind(this, 'About')}
                         >
                             <View style={settingStyles.icons}>
-                                <Icon size={20}  color="#FD6A02" name={'timeline'} />
+                                <Icon size={20}  color="rgb(255,68,34)" name={'timeline'} />
                             </View>
                             <Text style={settingStyles.settingOptionsText}>{'About'}</Text>
                         </TouchableOpacity>
@@ -319,7 +319,7 @@ _removeData = async()=> {
                             onPress={this.navigateSettings.bind(this, 'Logout')}
                         >
                             <View style={settingStyles.icons}>
-                                <Icon size={20}  color="#FD6A02" name={'power-settings-new'} />
+                                <Icon size={20}  color="rgb(255,68,34)" name={'power-settings-new'} />
                             </View>
                             <Text style={settingStyles.settingOptionsText}>{'Logout'}</Text>
                         </TouchableOpacity>

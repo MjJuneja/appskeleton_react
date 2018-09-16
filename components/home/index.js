@@ -480,14 +480,14 @@ class Home extends Component {
                                 minimumValue={1}
                                 maximumValue={10}
                                 step={1}
-                                minimumTrackTintColor={"#FD6A02"}
-                                maximumTrackTintColor={"#FD6A02"}
-                                thumbTintColor={"#FD6A02"}
+                                minimumTrackTintColor={"rgb(255,68,34)"}
+                                maximumTrackTintColor={"rgb(255,68,34)"}
+                                thumbTintColor={"rgb(255,68,34)"}
                                 value={this.state.sliderValue[this.state.currentQuestionCounter]}
                                 onValueChange={this.sliderValueHandler.bind(this, this.state.currentQuestionCounter)}
                             />
                         </View>
-                        <Text style={{alignSelf:"flex-end", fontSize: 50, fontFamily:"Raleway-ExtraBold", padding: 20, color: "#FD6A02"}}>{this.state.sliderValue[this.state.currentQuestionCounter]}</Text>
+                        <Text style={{alignSelf:"flex-end", fontSize: 50, fontFamily:"Raleway-ExtraBold", padding: 20, color: "rgb(255,68,34)"}}>{this.state.sliderValue[this.state.currentQuestionCounter]}</Text>
                         </View>
                     </View>
 
@@ -541,7 +541,7 @@ const kTenTestStyles = StyleSheet.create({
         position: "absolute",
         bottom: 20,
         right: 20,
-        backgroundColor : "#FD6A02",
+        backgroundColor : "rgb(255,68,34)",
         zIndex: 10,
         padding: 15,
         borderRadius: 35,
@@ -576,7 +576,7 @@ const kTenTestStyles = StyleSheet.create({
         elevation: 4,
         margin: 15,
         marginTop: 20,
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         borderRadius: 5
     },
     tipOfTheDayBackground : {
@@ -598,7 +598,7 @@ const kTenTestStyles = StyleSheet.create({
         // borderWidth: 1,
         // borderColor: "#e9e9e9",
         borderBottomColor: "#f2f2f2",
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         padding: 5,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 5 },
@@ -718,7 +718,7 @@ const kTenTestStyles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 5,
         padding: 15,
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         borderRadius: 10,
         width: "30%"
     },
@@ -732,7 +732,7 @@ const kTenTestStyles = StyleSheet.create({
         marginBottom: 30
     },
     prevNextButtons : {
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         borderRadius: 3,
         padding: 12,
         marginRight: 20,
@@ -747,7 +747,7 @@ const kTenTestStyles = StyleSheet.create({
     },
     questionWrapperTaken : {
         marginTop: 20,
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         borderRadius: 5,
         padding: 10,
         paddingTop: 0,

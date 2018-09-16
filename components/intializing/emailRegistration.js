@@ -454,7 +454,7 @@ const registerStyle = StyleSheet.create({
     loginLink : {
         fontFamily : "Roboto-Medium",
         textDecorationLine: "underline",
-        color: "#FD6A02"
+        color: "rgb(255,68,34)"
     },
     errorMsg : {
         color: "red"

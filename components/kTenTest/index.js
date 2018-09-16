@@ -426,7 +426,7 @@ const kTenTestStyles = StyleSheet.create({
         position: "absolute",
         bottom: 20,
         right: 20,
-        backgroundColor : "#FD6A02",
+        backgroundColor : "rgb(255,68,34)",
         zIndex: 10,
         padding: 15,
         borderRadius: 35,
@@ -455,7 +455,7 @@ const kTenTestStyles = StyleSheet.create({
         elevation: 4,
         margin: 15,
         marginTop: 20,
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         borderRadius: 5
     },
     takenText : {
@@ -487,7 +487,7 @@ const kTenTestStyles = StyleSheet.create({
     },
     questionWrapperTaken : {
         marginTop: 20,
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         borderRadius: 5,
         padding: 10,
         paddingTop: 0,
@@ -616,7 +616,7 @@ const kTenTestStyles = StyleSheet.create({
         marginBottom: 30
     },
     prevNextButtons : {
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         borderRadius: 3,
         padding: 12,
         marginRight: 20,

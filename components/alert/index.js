@@ -68,12 +68,12 @@ const alertBoxStyles = StyleSheet.create({
     },
     number: {
         fontSize: 22,
-        color: "#FD6A02",
+        color: "rgb(255,68,34)",
         fontFamily: "Roboto-Bold"
     },
     closeButton: {
         alignSelf: "center",
-        backgroundColor: "#FD6A02",
+        backgroundColor: "rgb(255,68,34)",
         marginTop: 15,
         padding: 8,
         borderRadius: 3

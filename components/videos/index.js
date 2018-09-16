@@ -338,7 +338,7 @@ const videoListStyles = StyleSheet.create({
         position: "absolute",
         bottom: 80,
         right: 20,
-        backgroundColor : "#FD6A02",
+        backgroundColor : "rgb(255,68,34)",
         zIndex: 10,
         padding: 15,
         borderRadius: 35,
