@@ -431,7 +431,7 @@ const registerStyle = StyleSheet.create({
     },
     registerButton : {
         height: 40,
-        backgroundColor: "#FF7417",
+        backgroundColor: "rgb(255,68,34)",
         alignSelf: "stretch",
         justifyContent: "center",
         borderRadius: 5

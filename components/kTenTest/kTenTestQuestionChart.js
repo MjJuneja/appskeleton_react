@@ -464,7 +464,7 @@ export default class KTenTestQuestionChart extends React.PureComponent {
                 onPress= {this._previousHandle}
             >
                 {/* <Text style={{fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"}}>Previous</Text> */}
-                <Icon size={25} color="#FF7417" name="navigate-before"/>
+                <Icon size={25} color="rgb(255,68,34)" name="navigate-before"/>
             </TouchableOpacity>
             {this.state.valueType==0 ?
                 <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphDate}</Text> : <Text></Text>
@@ -482,13 +482,13 @@ export default class KTenTestQuestionChart extends React.PureComponent {
                 onPress= {this._nextHandle}
             >
                 {/* <Text style={{fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"}}>Next</Text> */}
-                <Icon size={25} color="#FF7417" name="navigate-next"/>
+                <Icon size={25} color="rgb(255,68,34)" name="navigate-next"/>
             </TouchableOpacity>
             </View>
 
             <View style={this.state.progressBarActive? {marginBottom: -6}: {marginBottom: 10}}>
             {this.state.progressBarActive ?
-            <ProgressBarAndroid styleAttr="Horizontal" color="#FF7417" />
+            <ProgressBarAndroid styleAttr="Horizontal" color="rgb(255,68,34)" />
             : <View></View>}
             </View>
 
@@ -516,7 +516,7 @@ export default class KTenTestQuestionChart extends React.PureComponent {
         <BarChart
             style={{ flex: 1, marginLeft: 16 }}
             data={ [...this.state.dataNow.datasets[0].data,0,0,0,0,0,0] }
-            svg={{ fill: '#FF7417' }}
+            svg={{ fill: 'rgb(255,68,34)' }}
             >
              <Grid direction={Grid.Direction.HORIZONTAL}/>
                 {/* <Labels/> */}
@@ -539,7 +539,7 @@ export default class KTenTestQuestionChart extends React.PureComponent {
             <BarChart
             style={{ flex: 1, marginLeft: 16 }}
             data={ this.state.dataNow.datasets[0].data }
-            svg={{ fill: '#FF7417' }}
+            svg={{ fill: 'rgb(255,68,34)' }}
             >
              <Grid direction={Grid.Direction.HORIZONTAL}/>
                 {/* <Labels/> */}
@@ -586,7 +586,7 @@ const chartStyles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 10,
         width: 100, 
-        backgroundColor: "#FF7417", 
+        backgroundColor: "rgb(255,68,34)", 
         padding: 12
     },
     buttonDay : {
@@ -598,6 +598,6 @@ const chartStyles = StyleSheet.create({
         fontFamily: "Roboto-Medium", color: "#fff", alignSelf: "center"
     },
     buttonDayText :{
-        fontFamily: "Roboto-Medium", color: "#FF7417", alignSelf: "center"
+        fontFamily: "Roboto-Medium", color: "rgb(255,68,34)", alignSelf: "center"
     }
 });

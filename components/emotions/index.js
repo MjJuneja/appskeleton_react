@@ -364,7 +364,7 @@ const loginStyle = StyleSheet.create({
     },
     loginButton : {
         height: 40,
-        backgroundColor: "#FF7417",
+        backgroundColor: "rgb(255,68,34)",
         alignSelf: "stretch",
         justifyContent: "center",
         borderRadius: 5
@@ -390,7 +390,7 @@ const loginStyle = StyleSheet.create({
     },
     confirmButton : {
         height: 40,
-        backgroundColor: "#FF7417",
+        backgroundColor: "rgb(255,68,34)",
         width: "70%",
         justifyContent: "center",
         alignSelf: "center",

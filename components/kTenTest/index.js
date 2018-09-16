@@ -333,7 +333,7 @@ class KTenTest extends Component {
                             }
                         />
 
-                            <TouchableOpacity  onPress={this.nextHandle} style={{alignSelf: "center", backgroundColor: "#FF7417", borderRadius: 5, marginTop: 25, paddingVertical: 7, paddingHorizontal: 25, 
+                            <TouchableOpacity  onPress={this.nextHandle} style={{alignSelf: "center", backgroundColor: "rgb(255,68,34)", borderRadius: 5, marginTop: 25, paddingVertical: 7, paddingHorizontal: 25, 
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.3,
@@ -473,7 +473,7 @@ const kTenTestStyles = StyleSheet.create({
         padding: 20,
         paddingHorizontal: 30,
         borderRadius: 5,
-        backgroundColor: "#FF7417",
+        backgroundColor: "rgb(255,68,34)",
         lineHeight: 25,
         fontSize: 16 ,
         color: "#fafafa",
@@ -571,7 +571,7 @@ const kTenTestStyles = StyleSheet.create({
         paddingHorizontal: 30,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        backgroundColor: "#FF7417",
+        backgroundColor: "rgb(255,68,34)",
         justifyContent: "center",
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

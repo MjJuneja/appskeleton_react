@@ -161,7 +161,7 @@ class GreatfulScreen extends Component {
                             onPress={this.handleNavigation.bind(this, "HomeScreen")}
                             style={{marginTop: 20, marginBottom: 20}}
                         >
-                    <Text style={{color: "#fff", fontSize: 16, marginTop: 10, fontFamily:"Roboto-Bold", width:"50%", padding:10, alignSelf: "center", textAlign:"center", backgroundColor:"#FF7417", borderRadius: 5}}>CONTINUE</Text>
+                    <Text style={{color: "#fff", fontSize: 16, marginTop: 10, fontFamily:"Roboto-Bold", width:"50%", padding:10, alignSelf: "center", textAlign:"center", backgroundColor:"rgb(255,68,34)", borderRadius: 5}}>CONTINUE</Text>
                 </TouchableOpacity>
 
             </ScrollView>
@@ -207,7 +207,7 @@ const messageScreenStyles = StyleSheet.create({
         lineHeight: 25,
         fontSize: 16 ,
         color: "#fafafa",
-        backgroundColor: "#FF7417",
+        backgroundColor: "rgb(255,68,34)",
         fontFamily: "OpenSans-SemiBold",
         justifyContent: "center",
         shadowColor: '#000',
@@ -227,7 +227,7 @@ const messageScreenStyles = StyleSheet.create({
         lineHeight: 25,
         fontSize: 16,
         color: "#fafafa",
-        backgroundColor: "#FF7417",
+        backgroundColor: "rgb(255,68,34)",
         fontFamily: "OpenSans-SemiBold",
         justifyContent: "center",
         shadowColor: '#000',
@@ -245,7 +245,7 @@ const messageScreenStyles = StyleSheet.create({
         fontSize: 16,
         marginTop: 15,
         fontFamily : "Roboto-Medium",
-        color : "#FF7417",
+        color : "rgb(255,68,34)",
         textAlign: "center"
     },
     inputContainer : {
@@ -270,7 +270,7 @@ const messageScreenStyles = StyleSheet.create({
         justifyContent: "center",
         borderWidth: 1,
         borderColor: "#e1e1e1",
-        backgroundColor: "#FF7417"
+        backgroundColor: "rgb(255,68,34)"
     },
     addButtonText : {
         fontSize: 30,
@@ -282,7 +282,7 @@ const messageScreenStyles = StyleSheet.create({
         padding: 20,
         paddingHorizontal: 30,
         borderRadius: 5,
-        backgroundColor: "#FF7417",
+        backgroundColor: "rgb(255,68,34)",
         justifyContent: "center",
         shadowColor: 'rgba(0,0,0,0.4)',
         shadowOffset: { width: 0, height: 2 },
