@@ -243,7 +243,7 @@ class Analysis extends Component {
           icon: 'assessment',
           navigate: 'Analysis',
           label: 'Analysis',
-          barColor: '#B71C1C',
+          barColor: '#388E3C',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -251,7 +251,7 @@ class Analysis extends Component {
           icon: 'assignment',
           navigate: 'KTenTest',
           label: 'K10',
-          barColor: '#E64A19',
+          barColor: '#388E3C',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -267,7 +267,7 @@ class Analysis extends Component {
             icon: 'settings',
             navigate: 'Settings',
             label: 'Settings',
-            barColor: '#ff3782',
+            barColor: '#388E3C',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         }
       ]
@@ -317,21 +317,13 @@ class Analysis extends Component {
             <View style={analysisStyles.container}>
             <Text style={{fontFamily:"Roboto-Bold", fontSize: 22, alignSelf: "center", color: "#333", marginBottom: 20, marginTop: 25}}>Today's Analysis</Text>
                 <TouchableOpacity
-                    onPress={this._handleNavigation.bind(this, "PositiveChart")}
+                    onPress={this._handleNavigation.bind(this, "SpeechAnalysis")}
                     style={analysisStyles.listButton}
                 >
                     <View style={analysisStyles.moodList}>
-                        <Text style={analysisStyles.cardText}>Positive Words</Text>
-                        <Text style={analysisStyles.percentage}>{this.state.positivePercentage+"%"}</Text>
+                        <Text style={analysisStyles.cardText}>Speech Analysis</Text>
+                        {/* <Text style={analysisStyles.percentage}>{this.state.positivePercentage+"%"}</Text> */}
                     </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={this._handleNavigation.bind(this, "NegativeChart")}
-                    style={analysisStyles.listButton}
-                >
-                <View style={analysisStyles.moodList}>
-                    <Text style={analysisStyles.cardText}>Negative Words</Text><Text style={analysisStyles.percentage}>{this.state.negativePercentage+"%"}</Text>
-                </View>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={this._handleNavigation.bind(this, "SentimentChart")}
@@ -342,7 +334,7 @@ class Analysis extends Component {
                 </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={analysisStyles.listButton}
                 >
                     <View style={analysisStyles.moodList}>
@@ -353,7 +345,7 @@ class Analysis extends Component {
                             />
                         </Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity
                     style={[analysisStyles.listButton, {marginBottom: 50}]}

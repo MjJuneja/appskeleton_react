@@ -82,6 +82,9 @@ class MessageScreen extends Component {
     }
 
     handleNavigation = (navigateTo)=> {
+        if(this.state.currentGreatfulValue!="") {
+            this.addGreatful();
+        }
         console.log(this.props);
         const { navigate } = this.props.navigation;
         navigate(navigateTo);

@@ -47,16 +47,41 @@ class Login extends Component {
             // We have data!!
             userData = JSON.parse(userData);
             console.log(userData);
-            this._handleNavigation("MessageScreen");
+            this.checkToken(userData.sessionId);
           } else {
               console.log("No data found");
-
+              this.setState({splashScreenActive: false});
           }
-          this.setState({splashScreenActive: false});
          } catch (error) {
            // Error retrieving data
            console.log(error);
          }
+      }
+
+      checkToken = token => {
+        axios({
+            method: 'post',
+            url: 'http://13.238.16.112/answer/getAnswer',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'token '+token
+            },
+            data: {
+              "fromDate":"2018-08-19T00:00:00.000Z",
+              "toDate":"2018-08-20T00:00:00.000Z"
+            }
+          }).then(data => {
+              console.log(data.data);
+              if(data.data.message=="Access denied") {
+                this._removeData();
+                this._handleNavigation('Home');
+              } else {
+                  console.log("access granted");
+                  this._handleNavigation("GreatfulScreen");
+              }
+          }).catch(err=>{
+                console.log(err);
+          });
       }
 
     _storeData = async (userData) => {
@@ -90,7 +115,7 @@ class Login extends Component {
                 if(data.data.message == "success") {
                     console.log("success");
                     this._storeData(data.data.userData);
-                    this._handleNavigation("MessageScreen");
+                    this._handleNavigation("GreatfulScreen");
                 }
                 this.refs.toast.show(data.data.message, 1000, () => {
                     // something you want to do at close

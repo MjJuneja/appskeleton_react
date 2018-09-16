@@ -26,6 +26,9 @@ import HomeQuestionChart from './components/home/homeQuestionChart';
 import KTenTestQuestionChart from './components/kTenTest/kTenTestQuestionChart';
 import AboutScreen from './components/about';
 import Privacy from './components/privacy';
+import GreatfulScreen from './components/intializing/greatful';
+import SpeechAnalysis from './components/analysis/speechAnalysis';
+import ScoreChart from './components/analysis/speechAnalysis/scoreChart';
 
 
 class ProfileScreen extends React.Component {
@@ -99,6 +102,25 @@ const Navigate = createStackNavigator({
             title: `Back to Analysis`,
             headerBackTitle: null,
         }),
+    },
+    GreatfulScreen : {
+        screen: GreatfulScreen,
+        navigationOptions: {
+            header: null,
+          }
+    },
+    SpeechAnalysis : {
+        screen: SpeechAnalysis,
+        navigationOptions: {
+            title: "Speech Analysis",
+          }
+    },
+    ScoreChart : {
+        screen: ScoreChart,
+        navigationOptions: () => ({
+            title: `Back to Speech Analysis`,
+            headerBackTitle: null,
+        })
     },
     NegativeChart : {
         screen: NegativeChart,

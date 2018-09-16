@@ -25,6 +25,7 @@ export default class HomeQuestionChart extends React.PureComponent {
             monthPart: 2,
             graphYear: "",
             graphDate: "",
+            graphWeek: "",
             dataNow: {
                 labels: [0],
                 datasets: [{
@@ -205,9 +206,10 @@ export default class HomeQuestionChart extends React.PureComponent {
             }
             let graphYear = moment(startDate).add(1, "days").toDate().getFullYear();
             this.setState({graphYear});
+            let graphWeek = labels[0]+"/"+graphYear+" - "+labels[6]+"/"+graphYear;
             tempDate1 = moment(startDate).subtract(5, "hours").subtract(30, "minutes").toDate();
                 tempDate1 = tempDate1.getDate()+"/"+(tempDate1.getMonth()+1)+"/"+tempDate1.getFullYear();
-            this.setState({graphData: tempGraphData.points, dataNow : dataNow, graphYear, graphDate: tempDate1});
+            this.setState({graphData: tempGraphData.points, dataNow : dataNow, graphYear, graphDate: tempDate1, graphWeek});
             console.log("final data", tempGraphData.points);
             this.setState({progressBarActive: false});
           }).catch(err=>{
@@ -327,7 +329,7 @@ export default class HomeQuestionChart extends React.PureComponent {
         } else if (value==1) {
             var startDate = moment().subtract(7, 'days').toDate().toISOString();
             var endDate = moment().toDate().toISOString();
-            this.setState({startDate, endDate});
+            this.setState({startDate, endDate, graphWeek:"xx/xx/xxxx - xx/xx/xxxx"});
 
             console.log("startDate" , startDate);
             console.log("ednDate", endDate);
@@ -480,7 +482,11 @@ export default class HomeQuestionChart extends React.PureComponent {
                 <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphDate}</Text> : <Text></Text>
             }
 
-            {this.state.valueType==1 || this.state.valueType==2 ?
+            { this.state.valueType==1 ?
+                <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphWeek}</Text> : <Text></Text>
+            }
+
+            {this.state.valueType==2 ?
                 <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphYear}</Text> : <Text></Text>
             }
             <TouchableOpacity

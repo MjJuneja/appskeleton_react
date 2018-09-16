@@ -10,43 +10,44 @@ class Login extends Component {
         super(props);
 
         this.state = {
-            email: "",
-            emailValidationMsg: ""
+            code: "+61",
+            mobile: "",
+            mobileValidationMsg: ""
         };
     }
 
-    validateEmail = email => {
-        var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
-        return re.test(email);
+    validateMobile = mobile => {
+        var re = /^[0-9]{10}$/;
+        return re.test(mobile);
     }
-    emailValidation = email => {
-        let emailValidationMsg = "";
-        if(this.validateEmail(email)) {
-            this.setState({emailValidationMsg});
+    mobileValidation = mobile => {
+        let mobileValidationMsg = "";
+        if(this.validateMobile(mobile)) {
+            this.setState({mobileValidationMsg: ""});
         } else {
-            emailValidationMsg = "Enter a valid email address";
-            this.setState({emailValidationMsg});
+            mobileValidationMsg = "Invalid Mobile Number";
+            this.setState({mobileValidationMsg})
         }
-        return emailValidationMsg;
+        return mobileValidationMsg;
     }
 
     loginHandle = ()=> {
 
-        let emailValidationMsg = this.emailValidation(this.state.email);
+        let mobileValidationMsg = "";
 
-        if(emailValidationMsg=="") {
+        mobileValidationMsg = this.mobileValidation(this.state.mobile);
 
-        this.refs.toast.show("Sending link...", 500, () => {
-            // something you want to do at close
-        });
+        if(mobileValidationMsg=="") {
+
         axios({
             method: 'post',
-            url: 'http://13.238.16.112/forgotpassword/sendLink',
+            url: 'http://13.238.16.112/profile/updateMobile',
             headers : {
                 'Content-Type' : 'application/json'
             },
             data: {
-                "email": this.state.email
+                "countryCode": this.state.code,
+                "mobileNumber" : this.state.mobile
             }
           }).then(data => {
               console.log(data.data);
@@ -70,7 +71,7 @@ class Login extends Component {
                     />
                     <Text style={loginStyle.loginHeading}>Watch Your Talk</Text>
                     <View>
-                        <TextInput
+                        {/* <TextInput
                             placeholder = "Email"
                             style={loginStyle.input}
                             onChangeText={(email) => {this.setState({email}); this.emailValidation(email)}}
@@ -78,12 +79,32 @@ class Login extends Component {
                             keyboardType = "email-address"
                             underlineColorAndroid='transparent'
                         />
-                        <Text style={loginStyle.errorMsg}>{this.state.emailValidationMsg}</Text>
+                        <Text style={loginStyle.errorMsg}>{this.state.emailValidationMsg}</Text> */}
+
+                        <View style={loginStyle.inputWrapperPhone}>
+                            <TextInput
+                                style={loginStyle.inputCode}
+                                onChangeText={(code) => {this.setState({code});}}
+                                value={this.state.code}
+                                keyboardType = "numeric"
+                                underlineColorAndroid='transparent'
+                            />
+                            <TextInput
+                                placeholder = "Phone Number"
+                                style={loginStyle.inputPhone}
+                                onChangeText={(mobile) => {this.setState({mobile}); this.mobileValidation(mobile);}}
+                                value={this.state.mobile}
+                                keyboardType = "numeric"
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
+                        <Text style={[loginStyle.errorMsg, {width: "100%", marginTop: -10, marginBottom: 10}]}>{this.state.mobileValidationMsg}</Text>
+
                         <TouchableOpacity
                             style={loginStyle.loginButton}
                             onPress={this.loginHandle}
                         >
-                            <Text style={loginStyle.loginButtonText}> Send Link  </Text>
+                            <Text style={loginStyle.loginButtonText}> Send OTP  </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -120,6 +141,29 @@ const loginStyle = StyleSheet.create({
         alignSelf: "center",
         color: "#222"
     },
+    inputWrapperPhone : {
+        marginBottom: 10,
+        display: "flex",
+        flexDirection: "row"
+    },
+    inputCode : {
+        flex: 1,
+        height: 40,
+        borderColor: "#e1e1e1", 
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 5,
+        backgroundColor: "#fff",
+    },
+    inputPhone : {
+        flex: 7,
+        height: 40,
+        borderColor: "#e1e1e1", 
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 5,
+        backgroundColor: "#fff",
+    },
     input : {
         height: 40,
         borderColor: "#e1e1e1", 
@@ -128,7 +172,7 @@ const loginStyle = StyleSheet.create({
         borderRadius: 5,
         color: "#333",
         backgroundColor: "#fff",
-        fontFamily: "Roboto-Regular",
+        fontFamily: "Roboto-Regular"
     },
     loginButton : {
         height: 40,

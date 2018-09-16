@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View,Image,Button, AsyncStorage, NativeModules, Alert} from 'react-native';
+import { StyleSheet, Text, View,Image,Button, AsyncStorage, NativeModules, Alert, Vibration} from 'react-native';
 // import BG1 from './BG1.svg';
 import {createStackNavigator} from 'react-navigation';
 import Navigate from './Navigate';
@@ -18,6 +18,9 @@ export default class App extends React.Component {
 
     ReactNativeVolumeController.change(0);
     this._retrieveData();
+
+
+    // Vibration.vibrate(DURATION);
 
     this.state = {
       fontLoaded : true,

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {StyleSheet, View, Text, Slider, Image, ScrollView, BackHandler, ProgressBarAndroid, TouchableOpacity, FlatList, AsyncStorage, Button} from 'react-native';
+import {StyleSheet, View, Text, Slider, Image, ScrollView, AppState, ProgressBarAndroid, TouchableOpacity, FlatList, AsyncStorage, Button} from 'react-native';
 import SplashScreen from "../splashscreen";
 import Toast, {DURATION} from 'react-native-easy-toast';
 import axios from 'axios';
@@ -196,7 +196,7 @@ class Home extends Component {
           icon: 'assessment',
           navigate: 'Analysis',
           label: 'Analysis',
-          barColor: '#B71C1C',
+          barColor: '#388E3C',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -204,7 +204,7 @@ class Home extends Component {
           icon: 'assignment',
           navigate: 'KTenTest',
           label: 'K10',
-          barColor: '#E64A19',
+          barColor: '#388E3C',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -220,7 +220,7 @@ class Home extends Component {
             icon: 'settings',
             navigate: 'Settings',
             label: 'Settings',
-            barColor: '#ff3782',
+            barColor: '#388E3C',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         }
       ]
@@ -284,8 +284,24 @@ class Home extends Component {
 
     componentDidMount() {
         console.log("component mounted");
+        AppState.addEventListener('change', this.handleAppStateChange);
         const { navigate } = this.props.navigation;
         console.log(this.props);
+    }
+
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this.handleAppStateChange);
+    }
+
+    handleAppStateChange = (appState)=> {
+        let timeBack = 0;
+        if(appState==='background') {
+            setInterval(()=>{
+                console.log("time in background", timeBack);
+                timeBack++;
+            },1000);
+            console.log("in background");
+        }
     }
 
     getTestStatus = ()=> {

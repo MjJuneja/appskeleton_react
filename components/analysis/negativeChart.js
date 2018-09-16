@@ -360,7 +360,7 @@ export default class NegativeChart extends React.PureComponent {
         } else if (value==1) {
             var startDate = moment().subtract(7, 'days').toDate().toISOString();
             var endDate = moment().toDate().toISOString();
-            this.setState({startDate, endDate});
+            this.setState({startDate, endDate, graphWeek:"xx/xx/xxxx - xx/xx/xxxx"});
 
             console.log("startDate" , startDate);
             console.log("ednDate", endDate);

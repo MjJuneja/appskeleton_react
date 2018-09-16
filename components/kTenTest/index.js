@@ -232,7 +232,7 @@ class KTenTest extends Component {
           icon: 'assessment',
           navigate: 'Analysis',
           label: 'Analysis',
-          barColor: '#B71C1C',
+          barColor: '#388E3C',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -240,7 +240,7 @@ class KTenTest extends Component {
           icon: 'assignment',
           navigate: 'KTenTest',
           label: 'K10',
-          barColor: '#E64A19',
+          barColor: '#388E3C',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -256,7 +256,7 @@ class KTenTest extends Component {
             icon: 'settings',
             navigate: 'Settings',
             label: 'Settings',
-            barColor: '#ff3782',
+            barColor: '#388E3C',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         }
       ]

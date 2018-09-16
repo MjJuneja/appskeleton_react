@@ -160,6 +160,7 @@ export default class Settings extends React.Component {
         console.log(data.data);
         if(data.data.message=="Access denied") {
           this._removeData();
+          this.setState({splashScreenActive: false});
           this._handleNavigation('Home');
         } else {
             console.log("access granted");

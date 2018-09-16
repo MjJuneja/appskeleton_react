@@ -25,6 +25,7 @@ export default class SentimentChart extends React.PureComponent {
             monthPart: 2,
             graphYear: "",
             graphDate: "",
+            graphWeek: "",
             dataNow: {
                 labels: [0],
                 datasets: [{
@@ -132,7 +133,7 @@ export default class SentimentChart extends React.PureComponent {
 
               let labels = [];
               let tempDate1 = "";
-              let tempGraphData = {"score": []};
+              let tempGraphData = {"score": [], "total":[]};
 
             //   console.log("start date", dateTemp);
             //   console.log("end date", endDateMoment);
@@ -140,9 +141,11 @@ export default class SentimentChart extends React.PureComponent {
                 // 12,3,6,9,12,3,6,9,12
                 labels = ["12AM", "3AM", "6AM", "9AM", "12PM", "3PM", "6PM", "9PM", "12AM"];
                 tempGraphData.score= [0,0,0,0,0,0,0,0,0];
+                tempGraphData.total= [0,0,0,0,0,0,0,0,0];
             } else {
               for(;moment(dateTemp).isBefore(endDateMoment);) {
                 tempGraphData.score.push(0);
+                tempGraphData.total.push(0);
                 labels.push(moment(dateTemp).toDate().getDate()+"/"+(moment(dateTemp).toDate().getMonth()+1));
                 console.log("current date", dateTemp);
                 dateTemp = moment(dateTemp).add(1, "days").toDate();
@@ -199,6 +202,7 @@ export default class SentimentChart extends React.PureComponent {
                     }
 
                     tempGraphData.score[tempIndex]+=value.score;
+                    tempGraphData.total[tempIndex]++;
     
                 });
               } else {
@@ -211,12 +215,13 @@ export default class SentimentChart extends React.PureComponent {
                 tempIndex = labels.indexOf(tempDM);
 
                 tempGraphData.score[tempIndex]+=value.score;
+                tempGraphData.total[tempIndex]++;
 
             });
         }
 
             tempGraphData.score.map((value, index)=>{
-                tempGraphData.score[index] = parseInt((value*100).toFixed(0)) | 0;
+                tempGraphData.score[index] = parseInt(((value*100)/tempGraphData.total[index]).toFixed(0)) | 0;
             });
 
             if(labels.length==0) {
@@ -234,7 +239,8 @@ export default class SentimentChart extends React.PureComponent {
             }
             let graphYear = moment(startDate).add(1, "days").toDate().getFullYear();
             this.setState({graphYear});
-            this.setState({graphData: tempGraphData.score, dataNow : dataNow, graphDate: tempDate1, graphYear});
+            let graphWeek = labels[0]+"/"+graphYear+" - "+labels[6]+"/"+graphYear;
+            this.setState({graphData: tempGraphData.score, dataNow : dataNow, graphDate: tempDate1, graphYear, graphWeek});
             console.log("final data", tempGraphData);
             this.setState({progressBarActive: false});
           }).catch(err=>{
@@ -278,10 +284,7 @@ export default class SentimentChart extends React.PureComponent {
             this.setState({graphYear});
 
               let labels = [];
-              let tempGraphData = {"score": []};
-              for(i=0;i<6;i++) {
-                tempGraphData.score.push(0);
-              }
+              let tempGraphData = {"score": [0,0,0,0,0,0], "total": [0,0,0,0,0,0]};
 
               this.setState({graphData:tempGraphData});
               let temp = data.data.data;
@@ -297,6 +300,7 @@ export default class SentimentChart extends React.PureComponent {
                     let tempDate = new Date(value.createdOn);
                     tempM = tempDate.getMonth();
                     tempGraphData.score[tempM]+=value.score;
+                    tempGraphData.total[tempM]++;
                 });
 
             } else {
@@ -305,9 +309,14 @@ export default class SentimentChart extends React.PureComponent {
                     let tempDate = new Date(value.createdOn);
                     tempM = tempDate.getMonth();
                     tempGraphData.score[tempM-6]+=value.score;
+                    tempGraphData.total[tempM-6]++;
                 });
             }
+
             console.log("graph data", tempGraphData);
+            tempGraphData.score.map((value, index)=>{
+                tempGraphData.score[index] = parseInt(((value*100)/tempGraphData.total[index]).toFixed(0)) || 0;
+            });
             console.log(labels);
             let dataNow = {
                 labels,
@@ -334,7 +343,7 @@ export default class SentimentChart extends React.PureComponent {
         } else if (value==1) {
             var startDate = moment().subtract(7, 'days').toDate().toISOString();
             var endDate = moment().toDate().toISOString();
-            this.setState({startDate, endDate});
+            this.setState({startDate, endDate, graphWeek:"xx/xx/xxxx - xx/xx/xxxx"});
 
             console.log("startDate" , startDate);
             console.log("ednDate", endDate);
@@ -479,7 +488,11 @@ export default class SentimentChart extends React.PureComponent {
                 <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphDate}</Text> : <Text></Text>
             }
 
-            {this.state.valueType==1 || this.state.valueType==2 ?
+            { this.state.valueType==1 ?
+                <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphWeek}</Text> : <Text></Text>
+            }
+
+            {this.state.valueType==2 ?
                 <Text style={{textAlign: "center", "fontFamily": "Roboto-Bold", marginTop: 15, fontSize: 18}}>{this.state.graphYear}</Text> : <Text></Text>
             }
             <TouchableOpacity
