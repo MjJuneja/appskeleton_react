@@ -11,7 +11,7 @@ import BottomNavigation, {
         key: 'games',
         icon: 'gamepad-variant',
         label: 'Games',
-        barColor: '#388E3C',
+        barColor: '#rgb(255,68,34)',
         pressColor: 'rgba(255, 255, 255, 0.16)'
       },
       {

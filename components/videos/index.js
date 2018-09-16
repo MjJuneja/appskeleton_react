@@ -120,7 +120,7 @@ class VideoList extends Component {
           icon: 'home',
           navigate: 'HomeScreen',
           label: 'Home',
-          barColor: '#388E3C',
+          barColor: '#rgb(255,68,34)',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -128,7 +128,7 @@ class VideoList extends Component {
           icon: 'assessment',
           navigate: 'Analysis',
           label: 'Analysis',
-          barColor: '#388E3C',
+          barColor: '#rgb(255,68,34)',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -136,7 +136,7 @@ class VideoList extends Component {
           icon: 'assignment',
           navigate: 'KTenTest',
           label: 'K10',
-          barColor: '#388E3C',
+          barColor: '#rgb(255,68,34)',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -144,7 +144,7 @@ class VideoList extends Component {
           icon: 'videocam',
           navigate: 'VideosList',
           label: 'Videos',
-          barColor: '#388E3C',
+          barColor: '#rgb(255,68,34)',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -152,7 +152,7 @@ class VideoList extends Component {
             icon: 'settings',
             navigate: 'Settings',
             label: 'Settings',
-            barColor: '#388E3C',
+            barColor: '#rgb(255,68,34)',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         }
       ]

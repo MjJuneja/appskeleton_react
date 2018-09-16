@@ -14,7 +14,7 @@ export default class BottomNav extends Component {
           icon: 'home',
           navigate: 'HomeScreen',
           label: 'Home',
-          barColor: '#388E3C',
+          barColor: '#rgb(255,68,34)',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -38,7 +38,7 @@ export default class BottomNav extends Component {
           icon: 'videocam',
           navigate: 'VideosList',
           label: 'Videos',
-          barColor: '#388E3C',
+          barColor: '#rgb(255,68,34)',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {

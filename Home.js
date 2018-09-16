@@ -22,7 +22,7 @@ export default class HomeScreen extends React.Component {
       key: 'games',
       icon: 'rowing',
       label: 'Games',
-      barColor: '#388E3C',
+      barColor: '#rgb(255,68,34)',
       pressColor: 'rgba(255, 255, 255, 0.16)'
     },
     {
@@ -43,7 +43,7 @@ export default class HomeScreen extends React.Component {
       key: 'Toys',
       icon: 'gamepad-variant',
       label: 'Toys',
-      barColor: '#388E3C',
+      barColor: '#rgb(255,68,34)',
       pressColor: 'rgba(255, 255, 255, 0.16)'
     }
   ]

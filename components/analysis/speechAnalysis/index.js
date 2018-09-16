@@ -155,7 +155,7 @@ class SpeechAnalysis extends Component {
           icon: 'home',
           navigate: 'HomeScreen',
           label: 'Home',
-          barColor: '#388E3C',
+          barColor: '#rgb(255,68,34)',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
@@ -179,7 +179,7 @@ class SpeechAnalysis extends Component {
           icon: 'videocam',
           navigate: 'VideosList',
           label: 'Videos',
-          barColor: '#388E3C',
+          barColor: '#rgb(255,68,34)',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
